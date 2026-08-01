@@ -1,0 +1,36 @@
+{
+  "name": "qite",
+  "version": "1.0.0",
+  "description": "AI Research Assistant for Thesis Analysis, Academic Search & Smart Citations",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
+    "@types/file-saver": "^2.0.7",
+    "canvas-confetti": "^1.9.4",
+    "clsx": "^2.1.1",
+    "file-saver": "^2.0.5",
+    "groq-sdk": "^1.6.0",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.55.0",
+    "next": "^16.4.0",
+    "pdf-parse": "^1.1.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0",
+    "zod": "^4.6.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4.3.3",
+    "@types/node": "^26.6.5",
+    "@types/pdf-parse": "^1.1.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --bg-brutal: #F5F2EA;
+  --black-brutal: #171717;
+  --yellow-brutal: #F4FF3F;
+  --blue-brutal: #3454FF;
+  --coral-brutal: #FF6B5E;
+  --white-brutal: #FFFFFF;
+}
+
+body {
+  background-color: var(--bg-brutal);
+  color: var(--black-brutal);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Neo-Brutalism Shadows & Borders */
+.brutal-border {
+  border: 3px solid #171717;
+}
+
+.brutal-border-sm {
+  border: 2px solid #171717;
+}
+
+.brutal-shadow {
+  box-shadow: 5px 5px 0 #171717;
+}
+
+.brutal-shadow-sm {
+  box-shadow: 3px 3px 0 #171717;
+}
+
+.brutal-shadow-lg {
+  box-shadow: 8px 8px 0 #171717;
+}
+
+.brutal-btn {
+  border: 3px solid #171717;
+  box-shadow: 4px 4px 0 #171717;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.brutal-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #171717;
+}
+
+.brutal-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #171717;
+}
+
+.brutal-card {
+  background-color: #FFFFFF;
+  border: 3px solid #171717;
+  box-shadow: 5px 5px 0 #171717;
+}
+
+.brutal-badge {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid #171717;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

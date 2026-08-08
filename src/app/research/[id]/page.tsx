@@ -1,0 +1,656 @@
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Navbar, Sidebar } from '@/components/layout';
+import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
+import { getStoredProjectById, saveProjectToStorage } from '@/lib/storage';
+import { formatAPA, formatIEEE, formatHarvard, formatVancouver, generateBibTeX, generateRIS } from '@/lib/citations/formatter';
+import { ResearchProject, JournalReference, CitationItem } from '@/types';
+import {
+  Sparkles,
+  BookOpen,
+  Quote,
+  ExternalLink,
+  Bookmark,
+  BookmarkCheck,
+  Check,
+  Copy,
+  ChevronRight,
+  Filter,
+  FileDown,
+  Layers,
+  ArrowLeft,
+  Info,
+  AlertTriangle,
+  Loader2
+} from 'lucide-react';
+
+export default function ResearchDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const projectId = params?.id as string;
+
+  const [project, setProject] = useState<ResearchProject | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedJournal, setSelectedJournal] = useState<JournalReference | null>(null);
+  const [activeChapterFilter, setActiveChapterFilter] = useState<string>('ALL');
+  const [sortOption, setSortOption] = useState<'relevance' | 'year' | 'citations'>('relevance');
+
+  // Citations Hunter State
+  const [generatingCitations, setGeneratingCitations] = useState(false);
+  const [activeCitationTab, setActiveCitationTab] = useState<'hunter' | 'formats'>('hunter');
+  const [activeFormatTab, setActiveFormatTab] = useState<'apa' | 'ieee' | 'harvard' | 'vancouver'>('apa');
+  const [copiedFormat, setCopiedFormat] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (projectId) {
+      const p = getStoredProjectById(projectId);
+      if (p) {
+        setProject(p);
+        if (p.journals && p.journals.length > 0) {
+          setSelectedJournal(p.journals[0]);
+        }
+      }
+      setLoading(false);
+    }
+  }, [projectId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#F5F2EA]">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center font-bold font-mono">
+          Memuat data riset...
+        </div>
+      </div>
+    );
+  }
+
+  if (!project) {
+    return (
+      <div className="min-h-screen flex flex-col bg-[#F5F2EA]">
+        <Navbar />
+        <div className="flex-1 p-8 max-w-lg mx-auto text-center space-y-4 pt-20">
+          <h2 className="text-2xl font-black">Proyek Tidak Ditemukan</h2>
+          <p className="text-sm font-bold text-neutral-600">
+            Proyek dengan ID ini tidak ada di penyimpanan lokal browser Anda.
+          </p>
+          <Link href="/dashboard">
+            <BrutalButton variant="yellow" className="mx-auto">
+              Kembali ke Dashboard
+            </BrutalButton>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Toggle Save Journal
+  const toggleSaveJournal = (journalId: string) => {
+    if (!project) return;
+    const updatedJournals = project.journals.map((j) => {
+      if (j.id === journalId) {
+        return { ...j, is_saved: !j.is_saved };
+      }
+      return j;
+    });
+
+    const updatedProj = { ...project, journals: updatedJournals };
+    setProject(updatedProj);
+    saveProjectToStorage(updatedProj);
+    if (selectedJournal?.id === journalId) {
+      setSelectedJournal({ ...selectedJournal, is_saved: !selectedJournal.is_saved });
+    }
+  };
+
+  // Run Citation Hunter with Groq AI
+  const handleGenerateCitations = async () => {
+    if (!selectedJournal) return;
+    setGeneratingCitations(true);
+
+    try {
+      const res = await fetch('/api/citations/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          journal: selectedJournal,
+          thesisContext: { title: project.title },
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      // Append citations to project
+      const newCits = data.citations as CitationItem[];
+      const existingCits = project.saved_citations || [];
+      const updatedProj = {
+        ...project,
+        saved_citations: [...existingCits, ...newCits],
+      };
+
+      setProject(updatedProj);
+      saveProjectToStorage(updatedProj);
+      setActiveCitationTab('hunter');
+    } catch (err) {
+      console.error('Error generating citations:', err);
+    } finally {
+      setGeneratingCitations(false);
+    }
+  };
+
+  const handleCopyText = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedFormat(label);
+    setTimeout(() => setCopiedFormat(null), 2000);
+  };
+
+  // Filter & Sort Journals
+  let displayedJournals = [...(project.journals || [])];
+  if (activeChapterFilter !== 'ALL') {
+    displayedJournals = displayedJournals.filter((j) => j.recommended_chapter === activeChapterFilter);
+  }
+
+  displayedJournals.sort((a, b) => {
+    if (sortOption === 'relevance') return (b.relevance_score || 0) - (a.relevance_score || 0);
+    if (sortOption === 'year') return (b.year || 0) - (a.year || 0);
+    if (sortOption === 'citations') return (b.citation_count || 0) - (a.citation_count || 0);
+    return 0;
+  });
+
+  const selectedCitations = (project.saved_citations || []).filter(
+    (c) => c.journal_id === selectedJournal?.id
+  );
+
+  return (
+    <div className="min-h-screen flex flex-col bg-[#F5F2EA]">
+      <Navbar />
+
+      {/* Top Breadcrumb & Project Header */}
+      <div className="bg-white brutal-border border-t-0 border-x-0 py-3 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <Link href="/dashboard" className="p-1.5 brutal-border-sm hover:bg-neutral-100">
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-black uppercase text-neutral-500 font-mono">
+                  HASIL TELAAH RISET
+                </span>
+                <BrutalBadge variant="yellow" className="text-[10px]">
+                  {project.document_type === 'pdf_scan' ? 'DOKUMEN PDF' : 'SCAN JUDUL'}
+                </BrutalBadge>
+              </div>
+              <h1 className="text-base md:text-lg font-black text-[#171717] line-clamp-1 max-w-2xl">
+                {project.title}
+              </h1>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <Link href="/citations">
+              <BrutalButton variant="white" size="sm">
+                <Bookmark className="w-3.5 h-3.5" />
+                <span>Koleksi Sitasi ({project.saved_citations?.length || 0})</span>
+              </BrutalButton>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 3-Column Main Workspace */}
+      <main className="flex-1 max-w-7xl mx-auto w-full p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* PANEL KIRI: Struktur Bab & Konsep Skripsi (Col 1-3) */}
+        <section className="lg:col-span-3 space-y-4">
+          <BrutalCard className="p-4 bg-white space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b-2 border-[#171717]">
+              <Layers className="w-4 h-4 text-[#3454FF]" />
+              <span className="text-xs font-black uppercase tracking-wider">STRUKTUR SKRIPSI</span>
+            </div>
+
+            {/* Filter Bab Buttons */}
+            <div className="space-y-1.5 font-bold text-xs">
+              <button
+                onClick={() => setActiveChapterFilter('ALL')}
+                className={`w-full text-left px-3 py-2 brutal-border-sm flex justify-between items-center transition-all ${
+                  activeChapterFilter === 'ALL' ? 'bg-[#171717] text-white' : 'bg-white hover:bg-neutral-100'
+                }`}
+              >
+                <span>Semua Bagian</span>
+                <span className="font-mono text-[10px]">{project.journals.length}</span>
+              </button>
+
+              {['BAB I', 'BAB II', 'BAB III', 'BAB IV', 'BAB V'].map((bab) => {
+                const count = project.journals.filter((j) => j.recommended_chapter === bab).length;
+                return (
+                  <button
+                    key={bab}
+                    onClick={() => setActiveChapterFilter(bab)}
+                    className={`w-full text-left px-3 py-2 brutal-border-sm flex justify-between items-center transition-all ${
+                      activeChapterFilter === bab ? 'bg-[#F4FF3F] text-[#171717]' : 'bg-white hover:bg-neutral-100'
+                    }`}
+                  >
+                    <span>{bab}</span>
+                    <span className="font-mono text-[10px]">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Variabel Penelitian */}
+            {project.analysis?.variables && (
+              <div className="pt-3 border-t-2 border-[#171717] space-y-2">
+                <span className="text-[11px] font-black uppercase text-neutral-500 block">
+                  VARIABEL &amp; KONSEP
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.analysis.variables.general_concepts?.map((c) => (
+                    <span key={c} className="text-[11px] font-bold bg-[#F5F2EA] px-2 py-0.5 brutal-border-sm">
+                      {c}
+                    </span>
+                  ))}
+                  {project.analysis.variables.independent?.map((c) => (
+                    <span key={c} className="text-[11px] font-bold bg-blue-100 px-2 py-0.5 brutal-border-sm text-blue-900">
+                      IV: {c}
+                    </span>
+                  ))}
+                  {project.analysis.variables.dependent?.map((c) => (
+                    <span key={c} className="text-[11px] font-bold bg-emerald-100 px-2 py-0.5 brutal-border-sm text-emerald-900">
+                      DV: {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Rumusan Masalah */}
+            {project.analysis?.problem_statement && (
+              <div className="pt-3 border-t-2 border-[#171717] space-y-1">
+                <span className="text-[11px] font-black uppercase text-neutral-500 block">
+                  RUMUSAN MASALAH
+                </span>
+                <p className="text-xs font-bold text-neutral-700 leading-relaxed bg-[#F5F2EA] p-2.5 brutal-border-sm">
+                  {project.analysis.problem_statement}
+                </p>
+              </div>
+            )}
+          </BrutalCard>
+
+          {/* Matrix Penelitian Terdahulu (Literature Matrix) */}
+          {project.analysis?.literature_matrix && project.analysis.literature_matrix.length > 0 && (
+            <BrutalCard className="p-4 bg-white space-y-3">
+              <span className="text-xs font-black uppercase tracking-wider block">
+                MATRIKS PENELITIAN TERDAHULU
+              </span>
+              <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                {project.analysis.literature_matrix.map((item, idx) => (
+                  <div key={idx} className="p-2.5 bg-[#F5F2EA] brutal-border-sm text-[11px] space-y-1">
+                    <div className="font-black text-[#171717]">{item.authors} ({item.year})</div>
+                    <div className="font-bold text-neutral-600 line-clamp-1">&quot;{item.title}&quot;</div>
+                    <div className="text-[10px] text-neutral-700">
+                      <span className="font-bold">Metode:</span> {item.methodology}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </BrutalCard>
+          )}
+        </section>
+
+        {/* PANEL TENGAH: Daftar Jurnal Akademik (Col 4-8) */}
+        <section className="lg:col-span-5 space-y-4">
+          <div className="flex items-center justify-between bg-white p-3 brutal-border-sm">
+            <span className="text-xs font-black uppercase">
+              {displayedJournals.length} JURNAL DITEMUKAN
+            </span>
+
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold text-neutral-500">Urut:</span>
+              <select
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value as any)}
+                className="text-xs font-bold bg-[#F5F2EA] border border-[#171717] p-1 focus:outline-none"
+              >
+                <option value="relevance">Skor Relevansi</option>
+                <option value="year">Tahun Terbaru</option>
+                <option value="citations">Sitasi Terbanyak</option>
+              </select>
+            </div>
+          </div>
+
+          {displayedJournals.length === 0 ? (
+            <BrutalCard className="p-8 text-center bg-white space-y-2">
+              <Info className="w-8 h-8 text-neutral-400 mx-auto" />
+              <div className="font-black text-sm">Tidak Ada Jurnal Pada Filter Ini</div>
+              <p className="text-xs font-bold text-neutral-500">
+                Pilih bagian bab lain atau ubah query pencarian.
+              </p>
+            </BrutalCard>
+          ) : (
+            <div className="space-y-3">
+              {displayedJournals.map((j) => {
+                const isSelected = selectedJournal?.id === j.id;
+                return (
+                  <div
+                    key={j.id}
+                    onClick={() => setSelectedJournal(j)}
+                    className={`p-4 brutal-card cursor-pointer transition-all ${
+                      isSelected
+                        ? 'bg-[#F4FF3F]/15 border-3 border-[#171717] shadow-[6px_6px_0_#171717]'
+                        : 'bg-white hover:bg-neutral-50'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1.5 flex-1">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {j.relevance_score && (
+                            <span className="text-[10px] font-black bg-emerald-100 text-emerald-900 border border-emerald-800 px-1.5 py-0.5">
+                              {j.relevance_score}% MATCH
+                            </span>
+                          )}
+                          <span className="text-[10px] font-black bg-[#171717] text-white px-1.5 py-0.5">
+                            {j.recommended_chapter || 'BAB II'}
+                          </span>
+                          <span className="text-[10px] font-bold uppercase font-mono text-neutral-500">
+                            {j.source}
+                          </span>
+                        </div>
+
+                        <h3 className="font-black text-sm text-[#171717] leading-snug">
+                          {j.title}
+                        </h3>
+
+                        <div className="text-xs font-bold text-neutral-600 line-clamp-1">
+                          {Array.isArray(j.authors) ? j.authors.slice(0, 3).join(', ') : 'Penulis'}
+                          {j.year ? ` • (${j.year})` : ''}
+                        </div>
+
+                        <div className="text-[11px] text-neutral-500 line-clamp-1 italic">
+                          {j.venue || 'Publikasi Ilmiah'}
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleSaveJournal(j.id);
+                        }}
+                        className={`p-2 brutal-border-sm shrink-0 transition-colors ${
+                          j.is_saved ? 'bg-[#FF6B5E] text-white' : 'bg-white hover:bg-neutral-100 text-neutral-700'
+                        }`}
+                        title="Simpan Jurnal"
+                      >
+                        {j.is_saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+                      </button>
+                    </div>
+
+                    {j.relevance_explanation && (
+                      <div className="mt-2.5 pt-2 border-t border-neutral-200 text-[11px] font-bold text-neutral-700 flex items-start gap-1.5">
+                        <span className="text-neutral-400">💡</span>
+                        <span>{j.relevance_explanation}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        {/* PANEL KANAN: Detail, Citation Hunter & Generator (Col 9-12) */}
+        <section className="lg:col-span-4 space-y-4">
+          {selectedJournal ? (
+            <BrutalCard className="p-5 bg-white space-y-5 sticky top-20">
+              {/* Header Jurnal */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <BrutalBadge variant="yellow" className="text-[10px]">
+                    CITATION RADAR
+                  </BrutalBadge>
+                  {selectedJournal.url && (
+                    <a
+                      href={selectedJournal.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-black text-[#3454FF] hover:underline flex items-center gap-1"
+                    >
+                      <span>Buka Sumber Asli</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
+
+                <h2 className="text-base font-black text-[#171717] leading-snug">
+                  {selectedJournal.title}
+                </h2>
+                <div className="text-xs font-bold text-neutral-600 mt-1">
+                  {Array.isArray(selectedJournal.authors) ? selectedJournal.authors.join(', ') : 'Penulis'}
+                </div>
+                <div className="text-[11px] font-mono text-neutral-500 mt-0.5">
+                  {selectedJournal.venue} • {selectedJournal.year || 'n.d.'}
+                </div>
+              </div>
+
+              {/* DOI & Access Pill */}
+              <div className="flex flex-wrap gap-2 text-xs">
+                {selectedJournal.doi && (
+                  <span className="bg-[#F5F2EA] px-2 py-0.5 font-bold font-mono brutal-border-sm text-[11px]">
+                    DOI: {selectedJournal.doi}
+                  </span>
+                )}
+                {selectedJournal.is_open_access && (
+                  <span className="bg-emerald-100 text-emerald-900 px-2 py-0.5 font-bold font-mono border border-emerald-800 text-[11px]">
+                    OPEN ACCESS
+                  </span>
+                )}
+              </div>
+
+              {/* Abstrak Jurnal */}
+              {selectedJournal.abstract && (
+                <div className="space-y-1">
+                  <span className="text-[11px] font-black uppercase text-neutral-500 block">
+                    ABSTRAK
+                  </span>
+                  <div className="max-h-36 overflow-y-auto p-2.5 bg-[#F5F2EA] brutal-border-sm text-xs font-normal text-neutral-800 leading-relaxed">
+                    {selectedJournal.abstract}
+                  </div>
+                </div>
+              )}
+
+              {/* Sub-Tabs: Citation Hunter vs Formats */}
+              <div className="border-b-2 border-[#171717] flex gap-2">
+                <button
+                  onClick={() => setActiveCitationTab('hunter')}
+                  className={`pb-2 text-xs font-black uppercase tracking-wider ${
+                    activeCitationTab === 'hunter'
+                      ? 'border-b-3 border-[#171717] text-[#171717]'
+                      : 'text-neutral-400 hover:text-neutral-700'
+                  }`}
+                >
+                  Citation Hunter
+                </button>
+                <button
+                  onClick={() => setActiveCitationTab('formats')}
+                  className={`pb-2 text-xs font-black uppercase tracking-wider ${
+                    activeCitationTab === 'formats'
+                      ? 'border-b-3 border-[#171717] text-[#171717]'
+                      : 'text-neutral-400 hover:text-neutral-700'
+                  }`}
+                >
+                  Generator Sitasi
+                </button>
+              </div>
+
+              {/* Citation Hunter Tab */}
+              {activeCitationTab === 'hunter' && (
+                <div className="space-y-3">
+                  {selectedCitations.length === 0 ? (
+                    <div className="text-center p-4 bg-[#F5F2EA] brutal-border-sm space-y-3">
+                      <Quote className="w-6 h-6 text-neutral-500 mx-auto" />
+                      <div className="text-xs font-bold text-neutral-700">
+                        Belum ada kutipan yang dibuat untuk jurnal ini.
+                      </div>
+                      <BrutalButton
+                        variant="yellow"
+                        size="sm"
+                        disabled={generatingCitations}
+                        onClick={handleGenerateCitations}
+                        className="w-full"
+                      >
+                        {generatingCitations ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Menganalisis Teks Sumber...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>Hasilkan Kutipan Cerdas AI</span>
+                          </>
+                        )}
+                      </BrutalButton>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {selectedCitations.map((cit) => (
+                        <div key={cit.id} className="p-3 bg-white brutal-border-sm space-y-2">
+                          <div className="flex items-center justify-between">
+                            <BrutalBadge
+                              variant={
+                                cit.citation_type === 'direct_quote'
+                                  ? 'yellow'
+                                  : cit.citation_type === 'paraphrase'
+                                  ? 'blue'
+                                  : 'white'
+                              }
+                              className="text-[10px]"
+                            >
+                              {cit.citation_type === 'direct_quote'
+                                ? 'Kutipan Langsung'
+                                : cit.citation_type === 'paraphrase'
+                                ? 'Parafrasa Akademik'
+                                : 'Ringkasan Abstrak'}
+                            </BrutalBadge>
+
+                            <button
+                              onClick={() => handleCopyText(cit.content, cit.id)}
+                              className="p-1 border border-[#171717] hover:bg-neutral-100"
+                              title="Salin Kalimat"
+                            >
+                              {copiedFormat === cit.id ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          </div>
+
+                          <p className="text-xs font-bold text-[#171717] leading-relaxed">
+                            &quot;{cit.content}&quot;
+                          </p>
+
+                          {cit.warning_label && (
+                            <div className="text-[10px] font-bold text-amber-800 bg-amber-50 p-1.5 border border-amber-300">
+                              ⚠️ {cit.warning_label}
+                            </div>
+                          )}
+
+                          <div className="text-[10px] font-mono text-neutral-500 pt-1">
+                            Sitasi Dalam Teks: {cit.formats.in_text}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Generator Formats Tab */}
+              {activeCitationTab === 'formats' && (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-4 gap-1 font-bold text-[10px]">
+                    {(['apa', 'ieee', 'harvard', 'vancouver'] as const).map((fmt) => (
+                      <button
+                        key={fmt}
+                        onClick={() => setActiveFormatTab(fmt)}
+                        className={`py-1.5 uppercase brutal-border-sm ${
+                          activeFormatTab === fmt ? 'bg-[#171717] text-white' : 'bg-white hover:bg-neutral-100'
+                        }`}
+                      >
+                        {fmt}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="p-3 bg-[#F5F2EA] brutal-border-sm space-y-2">
+                    <div className="text-xs font-mono font-bold text-neutral-800 break-words">
+                      {activeFormatTab === 'apa' && formatAPA(selectedJournal)}
+                      {activeFormatTab === 'ieee' && formatIEEE(selectedJournal)}
+                      {activeFormatTab === 'harvard' && formatHarvard(selectedJournal)}
+                      {activeFormatTab === 'vancouver' && formatVancouver(selectedJournal)}
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        let text = '';
+                        if (activeFormatTab === 'apa') text = formatAPA(selectedJournal);
+                        if (activeFormatTab === 'ieee') text = formatIEEE(selectedJournal);
+                        if (activeFormatTab === 'harvard') text = formatHarvard(selectedJournal);
+                        if (activeFormatTab === 'vancouver') text = formatVancouver(selectedJournal);
+                        handleCopyText(text, 'format');
+                      }}
+                      className="w-full py-1.5 px-3 bg-white brutal-border-sm text-xs font-black uppercase flex items-center justify-center gap-1.5 hover:bg-neutral-100"
+                    >
+                      {copiedFormat === 'format' ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Tersalin!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Salin Format {activeFormatTab.toUpperCase()}</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Export Options */}
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <button
+                      onClick={() => handleCopyText(generateBibTeX(selectedJournal), 'bibtex')}
+                      className="py-1.5 px-2 bg-white brutal-border-sm text-[11px] font-bold uppercase hover:bg-neutral-100 flex items-center justify-center gap-1"
+                    >
+                      <FileDown className="w-3.5 h-3.5" />
+                      <span>{copiedFormat === 'bibtex' ? 'Tersalin!' : 'Copy BibTeX'}</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleCopyText(generateRIS(selectedJournal), 'ris')}
+                      className="py-1.5 px-2 bg-white brutal-border-sm text-[11px] font-bold uppercase hover:bg-neutral-100 flex items-center justify-center gap-1"
+                    >
+                      <FileDown className="w-3.5 h-3.5" />
+                      <span>{copiedFormat === 'ris' ? 'Tersalin!' : 'Copy RIS'}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </BrutalCard>
+          ) : (
+            <BrutalCard className="p-8 text-center bg-white space-y-2">
+              <BookOpen className="w-8 h-8 text-neutral-400 mx-auto" />
+              <div className="font-black text-sm">Pilih Jurnal</div>
+              <p className="text-xs font-bold text-neutral-500">
+                Klik salah satu jurnal dari panel tengah untuk memeriksa kutipan cerdas dan format daftar pustaka.
+              </p>
+            </BrutalCard>
+          )}
+        </section>
+      </main>
+    </div>
+  );
+}

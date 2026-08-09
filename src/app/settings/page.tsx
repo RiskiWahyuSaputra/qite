@@ -1,0 +1,116 @@
+'use client';
+
+import React, { useState } from 'react';
+import { Navbar, Sidebar } from '@/components/layout';
+import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
+import { Settings, Shield, Cpu, Database, Trash2, CheckCircle2 } from 'lucide-react';
+
+export default function SettingsPage() {
+  const [cleared, setCleared] = useState(false);
+
+  const handleClearLocalStorage = () => {
+    if (confirm('Hapus seluruh riwayat riset, jurnal, dan kutipan dari browser Anda?')) {
+      localStorage.clear();
+      setCleared(true);
+      setTimeout(() => setCleared(false), 3000);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col bg-[#F5F2EA]">
+      <Navbar />
+
+      <div className="flex flex-1">
+        <Sidebar />
+
+        <main className="flex-1 p-6 md:p-8 max-w-5xl mx-auto w-full space-y-8">
+          <div className="pb-6 border-b-3 border-[#171717]">
+            <div className="flex items-center gap-2">
+              <h1 className="text-3xl md:text-4xl font-black text-[#171717]">
+                PENGATURAN &amp; STATUS SISTEM
+              </h1>
+              <BrutalBadge variant="yellow">CONFIG</BrutalBadge>
+            </div>
+            <p className="text-sm font-bold text-neutral-600 mt-1">
+              Informasi environment, model AI Groq, kuota Free Tier, dan manajemen penyimpanan.
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            {/* System Status Card */}
+            <BrutalCard className="p-6 bg-white space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b-2 border-[#171717]">
+                <Cpu className="w-5 h-5 text-[#3454FF]" />
+                <h3 className="text-lg font-black">Konfigurasi AI &amp; Academic API</h3>
+              </div>
+
+              <div className="space-y-3 text-xs font-mono">
+                <div className="flex justify-between items-center p-2.5 bg-[#F5F2EA] brutal-border-sm">
+                  <span className="font-bold">Groq Inference Engine:</span>
+                  <span className="font-black bg-emerald-100 text-emerald-900 px-2 py-0.5 border border-emerald-800">
+                    Aktif (Free Tier)
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center p-2.5 bg-[#F5F2EA] brutal-border-sm">
+                  <span className="font-bold">Default Model:</span>
+                  <span className="font-black text-[#171717]">openai/gpt-oss-20b</span>
+                </div>
+
+                <div className="flex justify-between items-center p-2.5 bg-[#F5F2EA] brutal-border-sm">
+                  <span className="font-bold">OpenAlex API:</span>
+                  <span className="font-black text-[#171717]">Works &amp; Citation Inverted Index</span>
+                </div>
+
+                <div className="flex justify-between items-center p-2.5 bg-[#F5F2EA] brutal-border-sm">
+                  <span className="font-bold">Crossref API:</span>
+                  <span className="font-black text-[#171717]">Bibliographic Polite Pool</span>
+                </div>
+              </div>
+            </BrutalCard>
+
+            {/* Supabase Status */}
+            <BrutalCard className="p-6 bg-white space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b-2 border-[#171717]">
+                <Database className="w-5 h-5 text-emerald-600" />
+                <h3 className="text-lg font-black">Database Cloud (Supabase PostgreSQL)</h3>
+              </div>
+
+              <p className="text-xs font-bold text-neutral-600 leading-relaxed">
+                Aplikasi mendukung mode Local-First tanpa kewajiban akun, serta siap disinkronisasi ke PostgreSQL Supabase menggunakan file migrasi yang telah disediakan di folder <code>supabase/migrations/</code>.
+              </p>
+            </BrutalCard>
+
+            {/* Data Reset */}
+            <BrutalCard className="p-6 bg-white space-y-4">
+              <div className="flex items-center gap-2 pb-2 border-b-2 border-[#171717]">
+                <Trash2 className="w-5 h-5 text-red-600" />
+                <h3 className="text-lg font-black">Bersihkan Penyimpanan Lokal</h3>
+              </div>
+
+              <p className="text-xs font-bold text-neutral-600 leading-relaxed">
+                Hapus semua riwayat skripsi, daftar jurnal, dan kutipan tersimpan dari browser perangkat ini. Tindakan ini tidak dapat dibatalkan.
+              </p>
+
+              <div>
+                <BrutalButton
+                  variant="coral"
+                  size="sm"
+                  onClick={handleClearLocalStorage}
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>Kosongkan Seluruh Data Lokal</span>
+                </BrutalButton>
+                {cleared && (
+                  <span className="text-xs font-bold text-emerald-700 ml-3 inline-flex items-center gap-1">
+                    <CheckCircle2 className="w-4 h-4" /> Data berhasil dibersihkan!
+                  </span>
+                )}
+              </div>
+            </BrutalCard>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

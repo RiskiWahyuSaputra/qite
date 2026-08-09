@@ -40,7 +40,7 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-3">
           <BrutalBadge variant="blue" className="hidden sm:inline-flex">
-            GROQ AI FREE TIER
+            AI RESEARCH RADAR
           </BrutalBadge>
           <Link
             href="/research/new"
@@ -102,7 +102,7 @@ export const Sidebar = () => {
           <div className="text-[11px] space-y-1 font-mono text-neutral-600">
             <div>• OpenAlex API: Online</div>
             <div>• Crossref API: Polite</div>
-            <div>• Groq SDK: Connected</div>
+            <div>• LLM Neural Engine: Connected</div>
           </div>
         </div>
       </div>

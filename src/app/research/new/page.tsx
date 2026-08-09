@@ -38,7 +38,7 @@ function NewResearchForm() {
 
   const stepsList = [
     'Document Parsing',
-    'AI Analysis (Groq)',
+    'AI Research Analysis',
     'Academic Search (OpenAlex/Crossref)',
     'Citation Matching',
     'Results Ready',
@@ -337,7 +337,7 @@ function NewResearchForm() {
 
             <div className="p-4 bg-neutral-100 brutal-border-sm text-xs font-bold text-neutral-700 space-y-1">
               <div>• Server mengekstrak teks asli (Judul, Rumusan, dan Metodologi).</div>
-              <div>• Teks di-chunk secara cerdas agar tidak melebihi batas kuota token Groq.</div>
+              <div>• Teks di-chunk secara cerdas agar efisien dan cepat diproses AI.</div>
               <div>• Dokumen Anda diproses secara privat dan tidak disimpan permanen tanpa izin.</div>
             </div>
 
@@ -383,7 +383,7 @@ export default function NewResearchPage() {
               <h1 className="text-3xl md:text-4xl font-black text-[#171717]">
                 NEW RESEARCH SCOUT
               </h1>
-              <BrutalBadge variant="yellow">GROQ INFERENCE</BrutalBadge>
+              <BrutalBadge variant="yellow">INTELLIGENT INFERENCE</BrutalBadge>
             </div>
             <p className="text-sm font-bold text-neutral-600 mt-1">
               Pilih metode pemindaian untuk menemukan referensi akademis dan menyusun daftar pustaka.

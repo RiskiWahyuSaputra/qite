@@ -90,8 +90,8 @@ export default function DashboardPage() {
 
             <BrutalCard className="p-4 bg-[#F4FF3F]">
               <div className="text-xs font-bold text-[#171717] uppercase">AI Inference</div>
-              <div className="text-xl font-black font-mono mt-2">Groq Free Tier</div>
-              <div className="text-[11px] font-bold text-neutral-800 mt-1">Model Aktif: gpt-oss-20b</div>
+              <div className="text-xl font-black font-mono mt-2">Ultra-Fast Engine</div>
+              <div className="text-[11px] font-bold text-neutral-800 mt-1">Status: Siap Menganalisis</div>
             </BrutalCard>
           </div>
 

@@ -67,7 +67,7 @@ export default function LandingPage() {
               </div>
               <div>
                 <div className="text-2xl font-black font-mono">0 Rupiah</div>
-                <div className="text-xs font-bold text-neutral-700 uppercase">Groq Free Tier Compatible</div>
+                <div className="text-xs font-bold text-neutral-700 uppercase">Gratis &amp; Terbuka untuk Mahasiswa</div>
               </div>
               <div>
                 <div className="text-2xl font-black font-mono">APA & IEEE</div>
@@ -180,7 +180,7 @@ export default function LandingPage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  Chunking cerdas hemat kuota token Groq
+                  Chunking cerdas efisiensi pemrosesan
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />

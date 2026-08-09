@@ -32,7 +32,7 @@ export default function SettingsPage() {
               <BrutalBadge variant="yellow">CONFIG</BrutalBadge>
             </div>
             <p className="text-sm font-bold text-neutral-600 mt-1">
-              Informasi environment, model AI Groq, kuota Free Tier, dan manajemen penyimpanan.
+              Informasi arsitektur sistem, model AI aktif, kuota inferensi, dan manajemen penyimpanan.
             </p>
           </div>
 
@@ -46,9 +46,9 @@ export default function SettingsPage() {
 
               <div className="space-y-3 text-xs font-mono">
                 <div className="flex justify-between items-center p-2.5 bg-[#F5F2EA] brutal-border-sm">
-                  <span className="font-bold">Groq Inference Engine:</span>
+                  <span className="font-bold">AI Inference Engine:</span>
                   <span className="font-black bg-emerald-100 text-emerald-900 px-2 py-0.5 border border-emerald-800">
-                    Aktif (Free Tier)
+                    Online &amp; Active
                   </span>
                 </div>
 

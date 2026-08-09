@@ -2,7 +2,7 @@
 
 **Qite (Skripsi Scout AI)** adalah asisten riset skripsi berbasis AI untuk mahasiswa Indonesia. Aplikasi ini membantu menganalisis judul dan draf skripsi (PDF), menemukan jurnal akademik terakreditasi melalui OpenAlex dan Crossref, memverifikasi kutipan riil, serta menyusun daftar pustaka otomatis (APA, IEEE, Harvard, Vancouver).
 
-Dibangun dengan estetika **Neo-Brutalism**, backend aman Next.js App Router, integrasi **Groq Free Tier SDK**, dan arsitektur Local-First yang dapat disinkronkan ke **Supabase PostgreSQL**.
+Dibangun dengan estetika **Neo-Brutalism**, backend aman Next.js App Router, integrasi **AI Inference Engine**, dan arsitektur Local-First yang dapat disinkronkan ke **Supabase PostgreSQL**.
 
 ---
 
@@ -13,7 +13,7 @@ Dibangun dengan estetika **Neo-Brutalism**, backend aman Next.js App Router, int
    - Menghasilkan kata kunci pencarian bilingual (Indonesia & Inggris).
 2. **Mode B — Scan PDF Skripsi**
    - Ekstraksi teks dokumen PDF langsung di server Next.js.
-   - Chunking cerdas untuk menjaga efisiensi token Groq Free Tier.
+   - Chunking cerdas untuk menjaga efisiensi pemrosesan dokumen.
    - Deteksi dokumen scan gambar/OCR.
 3. **Pencarian Akademik Nyata (No AI Halusinasi)**
    - Integrasi langsung dengan **OpenAlex API** dan **Crossref API**.
@@ -35,7 +35,7 @@ Dibangun dengan estetika **Neo-Brutalism**, backend aman Next.js App Router, int
 - **Bahasa**: TypeScript
 - **Styling**: Tailwind CSS v4 (Neo-Brutalism Design System)
 - **Icons**: Lucide React
-- **AI Inference**: Groq SDK (`openai/gpt-oss-20b` / `openai/gpt-oss-120b` / `qwen/qwen3.8-27b`)
+- **AI Inference Engine**: High-Performance Neural LLM
 - **PDF Extraction**: `pdf-parse`
 - **Academic APIs**: OpenAlex REST API & Crossref API (Polite Pool)
 - **Database / Auth**: Supabase PostgreSQL dengan RLS (Row Level Security)

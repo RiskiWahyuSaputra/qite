@@ -3,6 +3,7 @@ import { searchOpenAlex } from './openalex';
 import { searchCrossref } from './crossref';
 import { searchSemanticScholar } from './semanticscholar';
 import { callGroqStructured } from '@/lib/ai/groq';
+import { determineAcademicBadges } from './badges';
 
 /**
  * Normalizes title string for duplicate checking
@@ -131,6 +132,9 @@ ${JSON.stringify(batchToEvaluate, null, 2)}`;
 
     // Default scoring for non-evaluated remaining items
     uniqueJournals.forEach((j) => {
+      if (!j.indexing_badges) {
+        j.indexing_badges = determineAcademicBadges(j);
+      }
       if (!j.relevance_score) {
         j.relevance_score = j.citation_count ? Math.min(95, 70 + Math.min(j.citation_count, 25)) : 75;
         j.relevance_explanation = `Referensi akademis terkait dari publikasi ${j.venue || 'resmi'}.`;

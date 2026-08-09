@@ -8,7 +8,8 @@ import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { getStoredProjectById, saveProjectToStorage } from '@/lib/storage';
 import { formatAPA, formatIEEE, formatHarvard, formatVancouver, generateBibTeX, generateRIS } from '@/lib/citations/formatter';
 import { getPdfDirectOrFallback } from '@/lib/academic/pdf-resolver';
-import { ResearchProject, JournalReference, CitationItem } from '@/types';
+import { determineAcademicBadges } from '@/lib/academic/badges';
+import { ResearchProject, JournalReference, CitationItem, PriorLiteratureItem } from '@/types';
 import {
   Sparkles,
   BookOpen,
@@ -44,6 +45,8 @@ export default function ResearchDetailPage() {
   const [activeCitationTab, setActiveCitationTab] = useState<'hunter' | 'formats'>('hunter');
   const [activeFormatTab, setActiveFormatTab] = useState<'apa' | 'ieee' | 'harvard' | 'vancouver'>('apa');
   const [copiedFormat, setCopiedFormat] = useState<string | null>(null);
+  const [generatingMatrix, setGeneratingMatrix] = useState(false);
+  const [showMatrixModal, setShowMatrixModal] = useState(false);
 
   useEffect(() => {
     if (projectId) {
@@ -103,6 +106,43 @@ export default function ResearchDetailPage() {
     saveProjectToStorage(updatedProj);
     if (selectedJournal?.id === journalId) {
       setSelectedJournal({ ...selectedJournal, is_saved: !selectedJournal.is_saved });
+    }
+  };
+
+  // Handle Generate Literature Matrix
+  const handleGenerateMatrix = async () => {
+    if (!project || !project.analysis) return;
+    setGeneratingMatrix(true);
+
+    try {
+      const res = await fetch('/api/research/matrix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: project.title,
+          field: project.analysis.field_of_study || 'Umum',
+          journals: project.journals,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.matrix) {
+        const updatedProj: ResearchProject = {
+          ...project,
+          analysis: {
+            ...project.analysis,
+            literature_matrix: data.matrix,
+          },
+        };
+        setProject(updatedProj);
+        saveProjectToStorage(updatedProj);
+        setShowMatrixModal(true);
+      }
+    } catch (err) {
+      console.error('Error generating matrix:', err);
+      alert('Gagal menghasilkan matriks penelitian terdahulu.');
+    } finally {
+      setGeneratingMatrix(false);
     }
   };
 
@@ -192,6 +232,16 @@ export default function ResearchDetailPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            {/* Tombol Matriks Penelitian Terdahulu */}
+            <button
+              onClick={handleGenerateMatrix}
+              disabled={generatingMatrix}
+              className="py-1.5 px-3 bg-[#F4FF3F] text-[#171717] brutal-border-sm font-black text-xs uppercase flex items-center gap-1.5 hover:bg-[#e4ef30] shadow-[2px_2px_0_#171717]"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#171717]" />
+              <span>{generatingMatrix ? 'Menyusun Matriks...' : 'Matriks Penelitian (Bab II)'}</span>
+            </button>
+
             <Link href="/citations">
               <BrutalButton variant="white" size="sm">
                 <Bookmark className="w-3.5 h-3.5" />
@@ -356,9 +406,24 @@ export default function ResearchDetailPage() {
                           <span className="text-[10px] font-black bg-[#171717] text-white px-1.5 py-0.5">
                             {j.recommended_chapter || 'BAB II'}
                           </span>
-                          <span className="text-[10px] font-bold uppercase font-mono text-neutral-500">
-                            {j.source}
-                          </span>
+                          
+                          {/* BADGE INDEKS AKADEMIS (SCOPUS, SINTA, DOAJ) */}
+                          {(j.indexing_badges || determineAcademicBadges(j)).map((b, bIdx) => (
+                            <span
+                              key={bIdx}
+                              className={`text-[9px] font-black px-1.5 py-0.5 border ${
+                                b.includes('SCOPUS')
+                                  ? 'bg-[#3454FF] text-white border-[#171717]'
+                                  : b.includes('SINTA')
+                                  ? 'bg-amber-300 text-[#171717] border-[#171717]'
+                                  : b.includes('TOP CITED')
+                                  ? 'bg-[#FF6B5E] text-white border-[#171717]'
+                                  : 'bg-[#F5F2EA] text-neutral-800 border-neutral-400'
+                              }`}
+                            >
+                              {b}
+                            </span>
+                          ))}
                         </div>
 
                         <h3 className="font-black text-sm text-[#171717] leading-snug">
@@ -760,6 +825,108 @@ export default function ResearchDetailPage() {
           )}
         </section>
       </main>
+
+      {/* MODAL MATRIKS PENELITIAN TERDAHULU (BAB II) */}
+      {showMatrixModal && project?.analysis?.literature_matrix && (
+        <div className="fixed inset-0 z-50 bg-[#171717]/80 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#F5F2EA] brutal-border border-4 max-w-5xl w-full p-6 space-y-5 my-8 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b-3 border-[#171717]">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-black text-xl text-[#171717]">MATRIKS PENELITIAN TERDAHULU</span>
+                  <BrutalBadge variant="yellow" className="text-[10px]">BAB II SKRIPSI</BrutalBadge>
+                </div>
+                <p className="text-xs font-bold text-neutral-600 mt-0.5">
+                  Tabel sintesis telaah pustaka siap disalin ke dokumen skripsi Microsoft Word Anda.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowMatrixModal(false)}
+                className="p-1.5 brutal-border-sm bg-white hover:bg-neutral-100 font-black text-sm"
+              >
+                ✕ TUTUP
+              </button>
+            </div>
+
+            {/* Tabel Matriks Neo-Brutalism */}
+            <div className="overflow-x-auto brutal-border bg-white">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-[#171717] text-white font-mono text-[11px] uppercase">
+                    <th className="p-2.5 border-r border-neutral-700 w-12 text-center">No</th>
+                    <th className="p-2.5 border-r border-neutral-700 w-36">Penulis &amp; Tahun</th>
+                    <th className="p-2.5 border-r border-neutral-700 w-48">Judul Penelitian</th>
+                    <th className="p-2.5 border-r border-neutral-700 w-44">Metode</th>
+                    <th className="p-2.5 border-r border-neutral-700 w-56">Temuan Utama</th>
+                    <th className="p-2.5 border-r border-neutral-700 w-44">Persamaan</th>
+                    <th className="p-2.5">Perbedaan (Kebaruan Anda)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y-2 divide-[#171717]">
+                  {project.analysis.literature_matrix.map((item, idx) => (
+                    <tr key={idx} className="hover:bg-neutral-50 align-top">
+                      <td className="p-2.5 font-mono font-bold text-center border-r-2 border-[#171717] bg-neutral-100">
+                        {idx + 1}
+                      </td>
+                      <td className="p-2.5 font-bold border-r-2 border-[#171717]">
+                        <div className="text-neutral-900">{item.authors}</div>
+                        <div className="font-mono text-neutral-500 text-[11px]">({item.year})</div>
+                      </td>
+                      <td className="p-2.5 font-bold text-neutral-800 border-r-2 border-[#171717]">
+                        {item.title}
+                      </td>
+                      <td className="p-2.5 text-neutral-700 border-r-2 border-[#171717]">
+                        {item.methodology}
+                      </td>
+                      <td className="p-2.5 text-neutral-800 font-medium border-r-2 border-[#171717]">
+                        {item.key_findings}
+                      </td>
+                      <td className="p-2.5 text-neutral-700 border-r-2 border-[#171717]">
+                        {item.similarities}
+                      </td>
+                      <td className="p-2.5 text-neutral-900 font-bold bg-[#F4FF3F]/20">
+                        {item.differences}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+              <div className="text-xs font-mono text-neutral-600">
+                💡 Tip: Blok seluruh tabel di atas lalu tekan <kbd className="px-1.5 py-0.5 bg-neutral-200 border border-[#171717] font-bold">Ctrl + C</kbd>, lalu paste langsung ke Microsoft Word.
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    const text = project.analysis?.literature_matrix?.map((m, i) => 
+                      `${i+1}. ${m.authors} (${m.year}) - "${m.title}"\nMetode: ${m.methodology}\nTemuan: ${m.key_findings}\nPersamaan: ${m.similarities}\nPerbedaan: ${m.differences}\n`
+                    ).join('\n---\n');
+                    if (text) {
+                      navigator.clipboard.writeText(text);
+                      alert('Rangkuman Matriks Penelitian berhasil disalin ke clipboard!');
+                    }
+                  }}
+                  className="py-2 px-4 bg-[#171717] text-white font-black text-xs uppercase brutal-border-sm hover:bg-neutral-800"
+                >
+                  Salin Teks Matriks
+                </button>
+
+                <button
+                  onClick={() => setShowMatrixModal(false)}
+                  className="py-2 px-4 bg-[#F4FF3F] text-[#171717] font-black text-xs uppercase brutal-border-sm hover:bg-[#e4ef30]"
+                >
+                  Selesai
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );

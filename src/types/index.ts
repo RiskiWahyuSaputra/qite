@@ -27,6 +27,7 @@ export interface JournalReference {
     suggested_intext: string; // e.g. (Smith et al., 2023)
     why_quote_here: string; // Alasan dikutip pada titik kalimat ini
   };
+  indexing_badges?: string[]; // e.g. ['SCOPUS Q1/Q2', 'SINTA COMPATIBLE', 'DOAJ INDEXED', 'TOP CITED']
   is_saved?: boolean;
   is_read?: boolean;
 }

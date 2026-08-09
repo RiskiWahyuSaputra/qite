@@ -107,9 +107,12 @@ export const Sidebar = () => {
         </div>
       </div>
 
-      <div className="pt-4 border-t-2 border-[#171717] text-xs font-mono text-neutral-500">
-        <div>Qite Skripsi v1.0.0</div>
+      <div className="pt-4 border-t-2 border-[#171717] text-xs font-mono text-neutral-500 space-y-1">
+        <div className="font-bold text-[#171717]">Qite Skripsi v1.0.0</div>
         <div className="text-[10px]">Neo-Brutalism Engine</div>
+        <div className="text-[10px] text-neutral-700 font-bold pt-1 border-t border-neutral-300">
+          Created by <span className="font-black text-[#171717]">Riski Wahyu Saputra</span>
+        </div>
       </div>
     </aside>
   );

@@ -253,6 +253,13 @@ export default function LandingPage() {
             <p className="text-xs text-neutral-400 font-mono">
               Academic Research Assistant for Indonesian University Students
             </p>
+            <div className="text-xs font-bold text-neutral-300 pt-1 flex items-center justify-center md:justify-start gap-1">
+              <span>Crafted with passion by</span>
+              <span className="text-[#F4FF3F] font-black underline decoration-2 underline-offset-2">
+                Riski Wahyu Saputra
+              </span>
+              <span>© 2026. All rights reserved.</span>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 text-xs font-bold">

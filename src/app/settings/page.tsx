@@ -81,6 +81,19 @@ export default function SettingsPage() {
               </p>
             </BrutalCard>
 
+            {/* Author & License Card */}
+            <BrutalCard className="p-6 bg-[#F4FF3F] space-y-2">
+              <div className="text-xs font-mono font-black uppercase text-neutral-800">
+                APPLICATION CREATOR &amp; COPYRIGHT
+              </div>
+              <div className="text-lg font-black text-[#171717]">
+                Developed &amp; Designed by Riski Wahyu Saputra
+              </div>
+              <div className="text-xs font-bold text-neutral-800">
+                © 2026 Qite — Skripsi Scout AI. All rights reserved.
+              </div>
+            </BrutalCard>
+
             {/* Data Reset */}
             <BrutalCard className="p-6 bg-white space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b-2 border-[#171717]">

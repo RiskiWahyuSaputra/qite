@@ -12,8 +12,7 @@ import {
   Sparkles,
   FolderKanban,
   Menu,
-  X,
-  AlignLeft
+  X
 } from 'lucide-react';
 import { BrutalBadge } from '@/components/brutalist';
 
@@ -183,5 +182,35 @@ export const Sidebar = () => {
         </div>
       </div>
     </aside>
+  );
+};
+
+export const Footer = () => {
+  return (
+    <footer className="mt-auto bg-[#171717] text-white border-t-4 border-[#171717] py-8 px-6">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+        <div className="space-y-1">
+          <div className="flex items-center justify-center md:justify-start gap-2">
+            <span className="font-black text-xl text-[#F4FF3F] font-mono">QITE</span>
+            <span className="text-[10px] font-bold bg-white text-[#171717] px-1.5 py-0.5">SKRIPSI SCOUT AI</span>
+          </div>
+          <div className="text-xs font-bold text-neutral-300 flex flex-wrap items-center justify-center md:justify-start gap-1">
+            <span>Crafted with passion by</span>
+            <span className="text-[#F4FF3F] font-black underline decoration-2 underline-offset-2">
+              Riski Wahyu Saputra
+            </span>
+            <span>© 2026. All rights reserved.</span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-neutral-400">
+          <Link href="/dashboard" className="hover:text-[#F4FF3F]">Dashboard</Link>
+          <Link href="/research/new" className="hover:text-[#F4FF3F]">New Research</Link>
+          <Link href="/library" className="hover:text-[#F4FF3F]">Library</Link>
+          <Link href="/citations" className="hover:text-[#F4FF3F]">Citations</Link>
+          <Link href="/settings" className="hover:text-[#F4FF3F]">Settings</Link>
+        </div>
+      </div>
+    </footer>
   );
 };

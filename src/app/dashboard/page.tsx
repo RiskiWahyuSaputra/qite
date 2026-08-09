@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Navbar, Sidebar } from '@/components/layout';
+import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { getStoredProjects, deleteProjectFromStorage } from '@/lib/storage';
 import { ResearchProject } from '@/types';
@@ -224,6 +224,8 @@ export default function DashboardPage() {
           </section>
         </main>
       </div>
+
+      <Footer />
     </div>
   );
 }

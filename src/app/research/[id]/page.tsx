@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Navbar, Sidebar } from '@/components/layout';
+import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { getStoredProjectById, saveProjectToStorage } from '@/lib/storage';
 import { formatAPA, formatIEEE, formatHarvard, formatVancouver, generateBibTeX, generateRIS } from '@/lib/citations/formatter';
@@ -680,6 +680,7 @@ export default function ResearchDetailPage() {
           )}
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

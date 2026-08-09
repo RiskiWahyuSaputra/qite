@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Navbar, Sidebar } from '@/components/layout';
+import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { Settings, Shield, Cpu, Database, Trash2, CheckCircle2 } from 'lucide-react';
 
@@ -124,6 +124,7 @@ export default function SettingsPage() {
           </div>
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

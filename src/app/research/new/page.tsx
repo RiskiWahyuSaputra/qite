@@ -2,7 +2,7 @@
 
 import React, { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Navbar, Sidebar } from '@/components/layout';
+import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { saveProjectToStorage } from '@/lib/storage';
 import {
@@ -543,6 +543,8 @@ export default function NewResearchPage() {
           </Suspense>
         </main>
       </div>
+
+      <Footer />
     </div>
   );
 }

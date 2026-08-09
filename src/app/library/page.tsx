@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Navbar, Sidebar } from '@/components/layout';
+import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { getStoredProjects, saveProjectToStorage } from '@/lib/storage';
 import { JournalReference, ResearchProject } from '@/types';
@@ -160,6 +160,7 @@ export default function LibraryPage() {
           )}
         </main>
       </div>
+      <Footer />
     </div>
   );
 }

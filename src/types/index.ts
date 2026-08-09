@@ -1,4 +1,4 @@
-export type DocumentScanType = 'title_scan' | 'pdf_scan';
+export type DocumentScanType = 'title_scan' | 'pdf_scan' | 'paragraph_scan';
 
 export interface Author {
   given?: string;
@@ -22,6 +22,11 @@ export interface JournalReference {
   relevance_score?: number; // 0 to 100
   relevance_explanation?: string;
   recommended_chapter?: 'BAB I' | 'BAB II' | 'BAB III' | 'BAB IV' | 'BAB V';
+  citation_recommendation?: {
+    sentence_to_cite: string; // Kalimat mana dalam paragraf pengguna yang membutuhkan sitasi ini
+    suggested_intext: string; // e.g. (Smith et al., 2023)
+    why_quote_here: string; // Alasan dikutip pada titik kalimat ini
+  };
   is_saved?: boolean;
   is_read?: boolean;
 }

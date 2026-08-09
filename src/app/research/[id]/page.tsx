@@ -181,7 +181,7 @@ export default function ResearchDetailPage() {
                   HASIL TELAAH RISET
                 </span>
                 <BrutalBadge variant="yellow" className="text-[10px]">
-                  {project.document_type === 'pdf_scan' ? 'DOKUMEN PDF' : 'SCAN JUDUL'}
+                  {project.document_type === 'pdf_scan' ? 'DOKUMEN PDF' : project.document_type === 'paragraph_scan' ? 'SCAN PARAGRAF' : 'SCAN JUDUL'}
                 </BrutalBadge>
               </div>
               <h1 className="text-base md:text-lg font-black text-[#171717] line-clamp-1 max-w-2xl">
@@ -394,6 +394,20 @@ export default function ResearchDetailPage() {
                         <span>{j.relevance_explanation}</span>
                       </div>
                     )}
+
+                    {j.citation_recommendation && (
+                      <div className="mt-2 p-2.5 bg-[#FF6B5E]/15 border-2 border-[#171717] text-[11px] space-y-1">
+                        <div className="font-black text-[#171717] flex items-center gap-1">
+                          <span>🎯 Dikutip pada kalimat:</span>
+                        </div>
+                        <div className="italic text-neutral-900 font-bold bg-white p-1.5 border border-[#171717]">
+                          &quot;{j.citation_recommendation.sentence_to_cite}&quot;
+                        </div>
+                        <div className="text-[10px] font-mono text-neutral-700 flex justify-between pt-0.5">
+                          <span>Format Sitasi: <strong>{j.citation_recommendation.suggested_intext}</strong></span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -448,6 +462,21 @@ export default function ResearchDetailPage() {
                   </span>
                 )}
               </div>
+
+              {/* Rekomendasi Titik Kutipan Paragraf */}
+              {selectedJournal.citation_recommendation && (
+                <div className="p-3 bg-[#FF6B5E]/15 brutal-border-sm space-y-1.5">
+                  <div className="text-[11px] font-black uppercase text-[#171717] flex items-center gap-1">
+                    <span>🎯 LOKASI SITASI DALAM PARAGRAF:</span>
+                  </div>
+                  <div className="text-xs font-bold text-neutral-800 bg-white p-2 border border-[#171717]">
+                    &quot;{selectedJournal.citation_recommendation.sentence_to_cite}&quot;
+                  </div>
+                  <div className="text-[11px] text-neutral-700 font-medium pt-0.5">
+                    <strong>Alasan Dikutip:</strong> {selectedJournal.citation_recommendation.why_quote_here}
+                  </div>
+                </div>
+              )}
 
               {/* Abstrak Jurnal */}
               {selectedJournal.abstract && (

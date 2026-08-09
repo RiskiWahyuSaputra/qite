@@ -13,27 +13,32 @@ import {
   Loader2,
   CheckCircle2,
   ArrowRight,
-  BookOpen
+  BookOpen,
+  Quote,
+  AlignLeft
 } from 'lucide-react';
 
 function NewResearchForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialMode = searchParams.get('mode') === 'pdf' ? 'pdf' : 'title';
+  const initialMode = searchParams.get('mode') === 'pdf' ? 'pdf' : searchParams.get('mode') === 'paragraph' ? 'paragraph' : 'title';
 
-  const [activeTab, setActiveTab] = useState<'title' | 'pdf'>(initialMode);
+  const [activeTab, setActiveTab] = useState<'title' | 'paragraph' | 'pdf'>(initialMode);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<number>(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Form State Mode A
+  // Form State Mode A (Judul)
   const [title, setTitle] = useState('');
   const [field, setField] = useState('Ilmu Komputer & Sistem Informasi');
   const [abstract, setAbstract] = useState('');
   const [startYear, setStartYear] = useState('2020');
   const [endYear, setEndYear] = useState('2026');
 
-  // Form State Mode B
+  // Form State Mode C (Paragraf / Kutipan Klaim)
+  const [paragraphText, setParagraphText] = useState('');
+
+  // Form State Mode B (PDF)
   const [file, setFile] = useState<File | null>(null);
 
   const stepsList = [
@@ -71,9 +76,47 @@ function NewResearchForm() {
       });
 
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Gagal menganalisis skripsi.');
-      }
+      if (!res.ok) throw new Error(data.error || 'Gagal menganalisis skripsi.');
+
+      setStep(4);
+      saveProjectToStorage(data.project);
+      setTimeout(() => {
+        router.push(`/research/${data.project.id}`);
+      }, 500);
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : 'Terjadi kesalahan sistem.');
+      setLoading(false);
+      setStep(0);
+    }
+  };
+
+  const handleParagraphSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!paragraphText.trim() || paragraphText.trim().length < 20) {
+      setErrorMsg('Paragraf minimal 20 karakter agar AI dapat mendeteksi klaim rujukan.');
+      return;
+    }
+
+    setLoading(true);
+    setErrorMsg(null);
+    setStep(1);
+
+    try {
+      const res = await fetch('/api/research/paragraph', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          paragraph: paragraphText,
+          field,
+          yearRange: {
+            startYear: parseInt(startYear) || 2020,
+            endYear: parseInt(endYear) || 2026,
+          },
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Gagal menganalisis paragraf.');
 
       setStep(4);
       saveProjectToStorage(data.project);
@@ -108,9 +151,7 @@ function NewResearchForm() {
       });
 
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Gagal mengekstrak PDF.');
-      }
+      if (!res.ok) throw new Error(data.error || 'Gagal mengekstrak PDF.');
 
       setStep(4);
       saveProjectToStorage(data.project);
@@ -126,32 +167,45 @@ function NewResearchForm() {
 
   return (
     <>
-      {/* Tab Selector */}
-      <div className="flex border-3 border-[#171717] bg-white brutal-shadow">
+      {/* 3 Tab Selector */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 border-3 border-[#171717] bg-white brutal-shadow">
         <button
           onClick={() => { setActiveTab('title'); setErrorMsg(null); }}
           disabled={loading}
-          className={`flex-1 py-4 px-6 font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+          className={`py-3.5 px-4 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
             activeTab === 'title'
-              ? 'bg-[#F4FF3F] text-[#171717] border-r-3 border-[#171717]'
-              : 'bg-white text-neutral-600 hover:bg-neutral-100 border-r-3 border-[#171717]'
+              ? 'bg-[#F4FF3F] text-[#171717] sm:border-r-3 border-b-3 sm:border-b-0 border-[#171717]'
+              : 'bg-white text-neutral-600 hover:bg-neutral-100 sm:border-r-3 border-b-3 sm:border-b-0 border-[#171717]'
           }`}
         >
           <FileText className="w-4 h-4" />
-          <span>Mode A: Scan Judul Skripsi</span>
+          <span>Mode A: Scan Judul</span>
+        </button>
+
+        <button
+          onClick={() => { setActiveTab('paragraph'); setErrorMsg(null); }}
+          disabled={loading}
+          className={`py-3.5 px-4 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+            activeTab === 'paragraph'
+              ? 'bg-[#FF6B5E] text-white sm:border-r-3 border-b-3 sm:border-b-0 border-[#171717]'
+              : 'bg-white text-neutral-600 hover:bg-neutral-100 sm:border-r-3 border-b-3 sm:border-b-0 border-[#171717]'
+          }`}
+        >
+          <Quote className="w-4 h-4" />
+          <span>Mode B: Scan Paragraf</span>
         </button>
 
         <button
           onClick={() => { setActiveTab('pdf'); setErrorMsg(null); }}
           disabled={loading}
-          className={`flex-1 py-4 px-6 font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+          className={`py-3.5 px-4 font-black text-xs md:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
             activeTab === 'pdf'
               ? 'bg-[#3454FF] text-white'
               : 'bg-white text-neutral-600 hover:bg-neutral-100'
           }`}
         >
           <Upload className="w-4 h-4" />
-          <span>Mode B: Scan PDF Skripsi</span>
+          <span>Mode C: Scan PDF</span>
         </button>
       </div>
 
@@ -199,7 +253,7 @@ function NewResearchForm() {
 
       {/* Form Mode A: Scan Judul */}
       {activeTab === 'title' && (
-        <BrutalCard className="p-8 bg-white space-y-6">
+        <BrutalCard className="p-6 md:p-8 bg-white space-y-6">
           <form onSubmit={handleTitleSubmit} className="space-y-6">
             <div>
               <label className="block text-xs font-black uppercase tracking-wider text-[#171717] mb-2">
@@ -301,9 +355,103 @@ function NewResearchForm() {
         </BrutalCard>
       )}
 
-      {/* Form Mode B: Scan PDF */}
+      {/* Form Mode B: Scan Paragraf (Cari Jurnal dari Kalimat Skripsi) */}
+      {activeTab === 'paragraph' && (
+        <BrutalCard className="p-6 md:p-8 bg-white space-y-6">
+          <form onSubmit={handleParagraphSubmit} className="space-y-6">
+            <div className="p-3 bg-[#FF6B5E]/10 border-l-4 border-[#FF6B5E] text-xs font-bold text-neutral-800">
+              💡 <strong>Smart Paragraph Citation Matcher</strong>: Paste satu paragraf skripsi Anda. AI akan membedah kalimat mana saja yang memuat klaim tanpa rujukan, lalu mencari jurnal ilmiah nyata dan menunjukkan persis kalimat mana yang harus dikutip.
+            </div>
+
+            <div>
+              <label className="block text-xs font-black uppercase tracking-wider text-[#171717] mb-2">
+                Tempel Paragraf Draft Skripsi Anda <span className="text-red-600">*</span>
+              </label>
+              <textarea
+                rows={6}
+                disabled={loading}
+                value={paragraphText}
+                onChange={(e) => setParagraphText(e.target.value)}
+                placeholder="Contoh: Penerapan metode deep learning pada klasifikasi citra medis telah menunjukkan peningkatan akurasi yang signifikan dibandingkan metode machine learning konvensional. Namun, keterbatasan data latih yang teranotasi masih menjadi hambatan utama dalam implementasi di rumah sakit, sehingga dibutuhkan teknik transfer learning dan augmentasi data."
+                className="w-full p-4 brutal-border bg-[#F5F2EA] font-bold text-sm text-[#171717] focus:outline-none focus:bg-white leading-relaxed"
+                required
+              />
+              <p className="text-[11px] font-bold text-neutral-500 mt-1">
+                AI akan mencocokkan setiap klaim argumen dalam paragraf ini ke jurnal akademik terkait.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-[#171717] mb-2">
+                  Bidang Penelitian
+                </label>
+                <input
+                  type="text"
+                  disabled={loading}
+                  value={field}
+                  onChange={(e) => setField(e.target.value)}
+                  placeholder="Kesehatan Digital / Kecerdasan Buatan"
+                  className="w-full p-3 brutal-border bg-[#F5F2EA] font-bold text-sm text-[#171717] focus:outline-none focus:bg-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#171717] mb-2">
+                    Tahun Dari
+                  </label>
+                  <input
+                    type="number"
+                    disabled={loading}
+                    value={startYear}
+                    onChange={(e) => setStartYear(e.target.value)}
+                    className="w-full p-3 brutal-border bg-[#F5F2EA] font-bold text-sm text-[#171717] focus:outline-none focus:bg-white font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#171717] mb-2">
+                    Tahun Sampai
+                  </label>
+                  <input
+                    type="number"
+                    disabled={loading}
+                    value={endYear}
+                    onChange={(e) => setEndYear(e.target.value)}
+                    className="w-full p-3 brutal-border bg-[#F5F2EA] font-bold text-sm text-[#171717] focus:outline-none focus:bg-white font-mono"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <BrutalButton
+                type="submit"
+                variant="coral"
+                size="lg"
+                disabled={loading}
+                className="w-full md:w-auto"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Mencari Jurnal untuk Paragraf...</span>
+                  </>
+                ) : (
+                  <>
+                    <Quote className="w-5 h-5" />
+                    <span>CARI JURNAL &amp; KUTIP PER KALIMAT</span>
+                  </>
+                )}
+              </BrutalButton>
+            </div>
+          </form>
+        </BrutalCard>
+      )}
+
+      {/* Form Mode C: Scan PDF */}
       {activeTab === 'pdf' && (
-        <BrutalCard className="p-8 bg-white space-y-6">
+        <BrutalCard className="p-6 md:p-8 bg-white space-y-6">
           <form onSubmit={handlePDFSubmit} className="space-y-6">
             <div className="border-3 border-dashed border-[#171717] p-8 md:p-12 text-center bg-[#F5F2EA] hover:bg-neutral-100 transition-colors cursor-pointer relative">
               <input
@@ -377,16 +525,16 @@ export default function NewResearchPage() {
       <div className="flex flex-1">
         <Sidebar />
 
-        <main className="flex-1 p-6 md:p-8 max-w-5xl mx-auto w-full space-y-8">
+        <main className="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full space-y-8">
           <div className="pb-6 border-b-3 border-[#171717]">
             <div className="flex items-center gap-2">
-              <h1 className="text-3xl md:text-4xl font-black text-[#171717]">
+              <h1 className="text-2xl md:text-4xl font-black text-[#171717]">
                 NEW RESEARCH SCOUT
               </h1>
               <BrutalBadge variant="yellow">INTELLIGENT INFERENCE</BrutalBadge>
             </div>
-            <p className="text-sm font-bold text-neutral-600 mt-1">
-              Pilih metode pemindaian untuk menemukan referensi akademis dan menyusun daftar pustaka.
+            <p className="text-xs md:text-sm font-bold text-neutral-600 mt-1">
+              Pilih metode pemindaian: Scan Judul, Cari dari Paragraf Skripsi, atau Unggah Dokumen PDF.
             </p>
           </div>
 

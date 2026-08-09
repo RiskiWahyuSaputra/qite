@@ -1,56 +1,124 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Compass, BookmarkCheck, FileText, Settings, Sparkles, FolderKanban } from 'lucide-react';
+import {
+  BookOpen,
+  Compass,
+  BookmarkCheck,
+  FileText,
+  Settings,
+  Sparkles,
+  FolderKanban,
+  Menu,
+  X,
+  AlignLeft
+} from 'lucide-react';
 import { BrutalBadge } from '@/components/brutalist';
 
 export const Navbar = () => {
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { label: 'Overview', href: '/dashboard', icon: Compass },
+    { label: 'New Research', href: '/research/new', icon: Sparkles },
+    { label: 'Journal Library', href: '/library', icon: BookOpen },
+    { label: 'Citations & Radar', href: '/citations', icon: BookmarkCheck },
+    { label: 'Settings', href: '/settings', icon: Settings },
+  ];
+
   return (
-    <nav className="w-full bg-[#FFFFFF] brutal-border border-t-0 border-x-0 py-4 px-6 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="bg-[#171717] text-white p-2 brutal-border">
-            <BookOpen className="w-6 h-6 text-[#F4FF3F]" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-black text-2xl tracking-tighter text-[#171717]">QITE</span>
-              <span className="text-xs font-black bg-[#F4FF3F] px-1.5 py-0.5 border border-[#171717]">SCOUT</span>
+    <>
+      <nav className="w-full bg-[#FFFFFF] brutal-border border-t-0 border-x-0 py-3.5 px-4 md:px-6 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="bg-[#171717] text-white p-2 brutal-border">
+              <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-[#F4FF3F]" />
             </div>
-            <p className="text-[10px] font-bold text-neutral-600 tracking-widest uppercase">Skripsi Scout AI</p>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-black text-xl md:text-2xl tracking-tighter text-[#171717]">QITE</span>
+                <span className="text-[10px] md:text-xs font-black bg-[#F4FF3F] px-1 py-0.2 border border-[#171717]">SCOUT</span>
+              </div>
+              <p className="text-[9px] md:text-[10px] font-bold text-neutral-600 tracking-widest uppercase">Skripsi Scout AI</p>
+            </div>
+          </Link>
+
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center gap-6">
+            <Link href="/dashboard" className="text-sm font-bold hover:underline">
+              Dashboard
+            </Link>
+            <Link href="/research/new" className="text-sm font-bold hover:underline">
+              New Research
+            </Link>
+            <Link href="/library" className="text-sm font-bold hover:underline">
+              Journal Library
+            </Link>
+            <Link href="/citations" className="text-sm font-bold hover:underline">
+              Citations
+            </Link>
           </div>
-        </Link>
 
-        <div className="hidden md:flex items-center gap-6">
-          <Link href="/dashboard" className="text-sm font-bold hover:underline">
-            Dashboard
-          </Link>
-          <Link href="/research/new" className="text-sm font-bold hover:underline">
-            New Research
-          </Link>
-          <Link href="/library" className="text-sm font-bold hover:underline">
-            Journal Library
-          </Link>
-          <Link href="/citations" className="text-sm font-bold hover:underline">
-            Citations
-          </Link>
-        </div>
+          <div className="flex items-center gap-2 md:gap-3">
+            <Link
+              href="/research/new"
+              className="brutal-btn bg-[#F4FF3F] text-[#171717] text-xs px-3 md:px-4 py-2 uppercase font-black"
+            >
+              Mulai Analisis
+            </Link>
 
-        <div className="flex items-center gap-3">
-          <BrutalBadge variant="blue" className="hidden sm:inline-flex">
-            AI RESEARCH RADAR
-          </BrutalBadge>
-          <Link
-            href="/research/new"
-            className="brutal-btn bg-[#F4FF3F] text-[#171717] text-xs px-4 py-2 uppercase font-black"
-          >
-            Mulai Analisis
-          </Link>
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 brutal-border-sm bg-white hover:bg-neutral-100 flex items-center justify-center text-[#171717]"
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+
+      {/* Mobile Drawer / Dropdown Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed inset-x-0 top-[61px] bottom-0 z-40 bg-[#F5F2EA] p-5 flex flex-col justify-between overflow-y-auto border-b-4 border-[#171717] animate-in fade-in slide-in-from-top-4 duration-150">
+          <div className="space-y-4">
+            <div className="text-[11px] font-black uppercase tracking-wider text-neutral-500 font-mono">
+              MENU UTAMA
+            </div>
+            <div className="space-y-2">
+              {navLinks.map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3 font-black text-sm brutal-border transition-all ${
+                      isActive
+                        ? 'bg-[#F4FF3F] text-[#171717] translate-x-1 shadow-[3px_3px_0_#171717]'
+                        : 'bg-white text-neutral-900 hover:bg-neutral-100'
+                    }`}
+                  >
+                    <Icon className="w-5 h-5 shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="pt-6 border-t-2 border-[#171717] text-xs font-mono text-neutral-600 space-y-1">
+            <div className="font-bold text-[#171717]">Qite — Skripsi Scout AI</div>
+            <div className="text-[11px]">Created by <span className="font-black text-[#171717]">Riski Wahyu Saputra</span></div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

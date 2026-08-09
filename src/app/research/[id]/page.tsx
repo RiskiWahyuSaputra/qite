@@ -210,10 +210,10 @@ export default function ResearchDetailPage() {
       <Navbar />
 
       {/* Top Breadcrumb & Project Header */}
-      <div className="bg-white brutal-border border-t-0 border-x-0 py-3 px-6">
+      <div className="bg-white brutal-border border-t-0 border-x-0 py-3.5 px-4 md:px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Link href="/dashboard" className="p-1.5 brutal-border-sm hover:bg-neutral-100">
+            <Link href="/dashboard" className="p-2 brutal-border-sm hover:bg-neutral-100 shrink-0">
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div>
@@ -225,21 +225,22 @@ export default function ResearchDetailPage() {
                   {project.document_type === 'pdf_scan' ? 'DOKUMEN PDF' : project.document_type === 'paragraph_scan' ? 'SCAN PARAGRAF' : 'SCAN JUDUL'}
                 </BrutalBadge>
               </div>
-              <h1 className="text-base md:text-lg font-black text-[#171717] line-clamp-1 max-w-2xl">
+              <h1 className="text-base md:text-xl font-black text-[#171717] line-clamp-1 max-w-2xl">
                 {project.title}
               </h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            {/* Tombol Matriks Penelitian Terdahulu */}
+          {/* Action Header Buttons */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Tombol Matriks Penelitian Terdahulu - Sangat Menonjol */}
             <button
               onClick={handleGenerateMatrix}
               disabled={generatingMatrix}
-              className="py-1.5 px-3 bg-[#F4FF3F] text-[#171717] brutal-border-sm font-black text-xs uppercase flex items-center gap-1.5 hover:bg-[#e4ef30] shadow-[2px_2px_0_#171717]"
+              className="py-2 px-3.5 bg-[#F4FF3F] text-[#171717] border-2 border-[#171717] font-black text-xs uppercase flex items-center gap-2 hover:bg-[#e4ef30] shadow-[3px_3px_0_#171717] active:translate-x-0.5 active:translate-y-0.5 cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#171717]" />
-              <span>{generatingMatrix ? 'Menyusun Matriks...' : 'Matriks Penelitian (Bab II)'}</span>
+              <Sparkles className="w-4 h-4 text-[#171717]" />
+              <span>{generatingMatrix ? 'Menyusun Matriks...' : '📋 Matriks Penelitian (Bab II)'}</span>
             </button>
 
             <Link href="/citations">
@@ -290,6 +291,18 @@ export default function ResearchDetailPage() {
                   </button>
                 );
               })}
+            </div>
+
+            {/* Quick Action Buat Matriks di Sidebar Kiri juga */}
+            <div className="pt-2">
+              <button
+                onClick={handleGenerateMatrix}
+                disabled={generatingMatrix}
+                className="w-full py-2 px-3 bg-[#F4FF3F] text-[#171717] border-2 border-[#171717] font-black text-xs uppercase flex items-center justify-center gap-2 hover:bg-[#e4ef30] shadow-[2px_2px_0_#171717] cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{generatingMatrix ? 'Memproses...' : 'Tabel Matriks Bab II'}</span>
+              </button>
             </div>
 
             {/* Variabel Penelitian */}

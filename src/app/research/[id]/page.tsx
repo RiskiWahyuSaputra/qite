@@ -7,6 +7,7 @@ import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { getStoredProjectById, saveProjectToStorage } from '@/lib/storage';
 import { formatAPA, formatIEEE, formatHarvard, formatVancouver, generateBibTeX, generateRIS } from '@/lib/citations/formatter';
+import { getPdfDirectOrFallback } from '@/lib/academic/pdf-resolver';
 import { ResearchProject, JournalReference, CitationItem } from '@/types';
 import {
   Sparkles,
@@ -372,6 +373,19 @@ export default function ResearchDetailPage() {
                         <div className="text-[11px] text-neutral-500 line-clamp-1 italic">
                           {j.venue || 'Publikasi Ilmiah'}
                         </div>
+
+                        {/* Indikator PDF / Open Access */}
+                        <div className="flex items-center gap-2 pt-1">
+                          {j.pdf_url ? (
+                            <span className="text-[10px] font-black bg-[#F4FF3F] text-[#171717] px-1.5 py-0.2 border border-[#171717] flex items-center gap-1">
+                              <FileDown className="w-3 h-3" /> PDF TERSEDIA
+                            </span>
+                          ) : (
+                            <span className="text-[10px] font-bold text-neutral-500 flex items-center gap-1">
+                              <span>Tersedia di Google Scholar</span>
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       <button
@@ -462,6 +476,49 @@ export default function ResearchDetailPage() {
                   </span>
                 )}
               </div>
+
+              {/* ACTION BAR: DOWNLOAD PDF & REPOSITORI VALID */}
+              {(() => {
+                const pdfInfo = getPdfDirectOrFallback(selectedJournal);
+                return (
+                  <div className="p-3 bg-[#F4FF3F]/20 border-2 border-[#171717] space-y-2">
+                    <div className="text-[11px] font-black uppercase tracking-wider text-[#171717]">
+                      📥 AKSES FULL-TEXT & PDF VALID:
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <a
+                        href={pdfInfo.downloadUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`py-2 px-3 brutal-border-sm text-xs font-black uppercase text-center flex items-center justify-center gap-1.5 transition-all ${
+                          pdfInfo.hasDirectPdf
+                            ? 'bg-[#F4FF3F] hover:bg-[#e4ef30] text-[#171717]'
+                            : 'bg-white hover:bg-neutral-100 text-[#171717]'
+                        }`}
+                      >
+                        <FileDown className="w-4 h-4 shrink-0 text-[#171717]" />
+                        <span>{pdfInfo.label}</span>
+                      </a>
+
+                      <a
+                        href={pdfInfo.googleScholarUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="py-2 px-3 bg-white hover:bg-neutral-100 brutal-border-sm text-xs font-black uppercase text-center flex items-center justify-center gap-1.5 text-[#171717]"
+                        title="Cek di Google Scholar untuk versi PDF lainnya"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5 shrink-0 text-[#3454FF]" />
+                        <span>Google Scholar</span>
+                      </a>
+                    </div>
+
+                    <div className="text-[10px] text-neutral-600 font-mono">
+                      * Sumber referensi diambil dari indeks resmi OpenAlex, Crossref &amp; Semantic Scholar.
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Rekomendasi Titik Kutipan Paragraf */}
               {selectedJournal.citation_recommendation && (

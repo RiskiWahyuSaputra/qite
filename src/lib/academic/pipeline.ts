@@ -1,6 +1,7 @@
 import { JournalReference } from '@/types';
 import { searchOpenAlex } from './openalex';
 import { searchCrossref } from './crossref';
+import { searchSemanticScholar } from './semanticscholar';
 import { callGroqStructured } from '@/lib/ai/groq';
 
 /**
@@ -52,11 +53,12 @@ export async function runAcademicSearchPipeline(
   },
   yearRange?: { startYear?: number; endYear?: number }
 ): Promise<JournalReference[]> {
-  // 1. Fetch from both sources in parallel for up to 3 primary queries
+  // 1. Fetch from OpenAlex, Crossref, and Semantic Scholar in parallel
   const activeQueries = queries.slice(0, 3);
   const searchPromises = activeQueries.flatMap((q) => [
     searchOpenAlex(q, 6, yearRange),
     searchCrossref(q, 6, yearRange),
+    searchSemanticScholar(q, 5, yearRange),
   ]);
 
   const rawResultsNested = await Promise.all(searchPromises);
@@ -70,7 +72,7 @@ export async function runAcademicSearchPipeline(
   }
 
   // 3. Batch evaluation with Groq to assess relevance, assign chapter recommendation, and score
-  const batchToEvaluate = uniqueJournals.slice(0, 12).map((j, idx) => ({
+  const batchToEvaluate = uniqueJournals.slice(0, 16).map((j, idx) => ({
     index: idx,
     title: j.title,
     venue: j.venue,
@@ -126,6 +128,15 @@ ${JSON.stringify(batchToEvaluate, null, 2)}`;
         }
       });
     }
+
+    // Default scoring for non-evaluated remaining items
+    uniqueJournals.forEach((j) => {
+      if (!j.relevance_score) {
+        j.relevance_score = j.citation_count ? Math.min(95, 70 + Math.min(j.citation_count, 25)) : 75;
+        j.relevance_explanation = `Referensi akademis terkait dari publikasi ${j.venue || 'resmi'}.`;
+        j.recommended_chapter = 'BAB II';
+      }
+    });
   } catch (err) {
     console.warn('Groq batch scoring fallback to heuristic:', err);
     // Fallback scoring if Groq rate limited

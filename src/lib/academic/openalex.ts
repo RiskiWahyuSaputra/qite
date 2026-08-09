@@ -86,7 +86,8 @@ export async function searchOpenAlex(
       const authors = (work.authorships || []).map((a) => a.author.display_name);
       const venue = work.primary_location?.source?.display_name || 'Academic Publication';
       const webUrl = work.primary_location?.landing_page_url || (work.doi ? work.doi : undefined);
-      const pdfUrl = work.open_access?.oa_url || work.primary_location?.pdf_url;
+      // Prioritize direct PDF URL if available, then fallback to oa_url or best location
+      const pdfUrl = work.primary_location?.pdf_url || (work.open_access?.is_oa ? work.open_access?.oa_url : undefined);
       const abstract = reconstructAbstract(work.abstract_inverted_index);
 
       return {

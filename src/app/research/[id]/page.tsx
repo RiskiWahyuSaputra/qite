@@ -388,18 +388,41 @@ export default function ResearchDetailPage() {
                         </div>
                       </div>
 
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleSaveJournal(j.id);
-                        }}
-                        className={`p-2 brutal-border-sm shrink-0 transition-colors ${
-                          j.is_saved ? 'bg-[#FF6B5E] text-white' : 'bg-white hover:bg-neutral-100 text-neutral-700'
-                        }`}
-                        title="Simpan Jurnal"
-                      >
-                        {j.is_saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
-                      </button>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {/* Tombol Unduh PDF / Repositori di samping Simpan Jurnal */}
+                        {(() => {
+                          const pdfInfo = getPdfDirectOrFallback(j);
+                          return (
+                            <a
+                              href={pdfInfo.downloadUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className={`p-2 brutal-border-sm flex items-center justify-center transition-colors ${
+                                pdfInfo.hasDirectPdf
+                                  ? 'bg-[#F4FF3F] hover:bg-[#e2ed28] text-[#171717]'
+                                  : 'bg-[#F5F2EA] hover:bg-neutral-200 text-neutral-800'
+                              }`}
+                              title={pdfInfo.label}
+                            >
+                              <FileDown className="w-4 h-4" />
+                            </a>
+                          );
+                        })()}
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleSaveJournal(j.id);
+                          }}
+                          className={`p-2 brutal-border-sm transition-colors ${
+                            j.is_saved ? 'bg-[#FF6B5E] text-white' : 'bg-white hover:bg-neutral-100 text-neutral-700'
+                          }`}
+                          title="Simpan Jurnal"
+                        >
+                          {j.is_saved ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </div>
 
                     {j.relevance_explanation && (

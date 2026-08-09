@@ -6,6 +6,7 @@ import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { getStoredProjects, deleteProjectFromStorage } from '@/lib/storage';
 import { ResearchProject } from '@/types';
+import { AdBanner } from '@/components/ads/AdBanner';
 import {
   Sparkles,
   BookOpen,
@@ -222,6 +223,9 @@ export default function DashboardPage() {
               </div>
             )}
           </section>
+
+          {/* Monetization / Sponsor Banner */}
+          <AdBanner slot="bottom-footer" className="mt-8" />
         </main>
       </div>
 

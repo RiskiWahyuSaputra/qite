@@ -15,6 +15,7 @@ import {
   X
 } from 'lucide-react';
 import { BrutalBadge } from '@/components/brutalist';
+import { AdBanner } from '@/components/ads/AdBanner';
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -172,6 +173,9 @@ export const Sidebar = () => {
             <div>• LLM Neural Engine: Connected</div>
           </div>
         </div>
+
+        {/* Slot Iklan / Sponsor Sidebar */}
+        <AdBanner slot="sidebar" />
       </div>
 
       <div className="pt-4 border-t-2 border-[#171717] text-xs font-mono text-neutral-500 space-y-1">

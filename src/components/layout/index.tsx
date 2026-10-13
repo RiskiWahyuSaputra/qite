@@ -12,21 +12,49 @@ import {
   Sparkles,
   FolderKanban,
   Menu,
-  X
+  X,
+  Globe,
 } from 'lucide-react';
 import { BrutalBadge } from '@/components/brutalist';
 import { AdBanner } from '@/components/ads/AdBanner';
+import { useLang } from '@/lib/i18n/LangContext';
+
+function LangSwitcher() {
+  const { lang, setLang } = useLang();
+  return (
+    <div className="flex items-center brutal-border-sm bg-white overflow-hidden shrink-0" aria-label="Language switcher">
+      <button
+        onClick={() => setLang('id')}
+        aria-pressed={lang === 'id'}
+        aria-label="Switch to Indonesian"
+        className={`px-2.5 py-1.5 text-xs font-black transition-colors ${lang === 'id' ? 'bg-[#F4FF3F] text-[#171717]' : 'bg-white text-neutral-500 hover:bg-neutral-100'}`}
+      >
+        ID
+      </button>
+      <div className="w-px self-stretch bg-[#171717]" />
+      <button
+        onClick={() => setLang('en')}
+        aria-pressed={lang === 'en'}
+        aria-label="Switch to English"
+        className={`px-2.5 py-1.5 text-xs font-black transition-colors ${lang === 'en' ? 'bg-[#F4FF3F] text-[#171717]' : 'bg-white text-neutral-500 hover:bg-neutral-100'}`}
+      >
+        EN
+      </button>
+    </div>
+  );
+}
 
 export const Navbar = () => {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t, lang } = useLang();
 
   const navLinks = [
-    { label: 'Overview', href: '/dashboard', icon: Compass },
-    { label: 'New Research', href: '/research/new', icon: Sparkles },
-    { label: 'Journal Library', href: '/library', icon: BookOpen },
-    { label: 'Citations & Radar', href: '/citations', icon: BookmarkCheck },
-    { label: 'Settings', href: '/settings', icon: Settings },
+    { label: t.nav.overview, labelEn: 'Overview', href: '/dashboard', icon: Compass },
+    { label: t.nav.newResearch, href: '/research/new', icon: Sparkles },
+    { label: t.nav.journalLibrary, href: '/library', icon: BookOpen },
+    { label: t.nav.citationsRadar, href: '/citations', icon: BookmarkCheck },
+    { label: t.nav.settings, href: '/settings', icon: Settings },
   ];
 
   return (
@@ -49,25 +77,38 @@ export const Navbar = () => {
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-6">
             <Link href="/dashboard" className="text-sm font-bold hover:underline">
-              Dashboard
+              {t.nav.dashboard}
             </Link>
             <Link href="/research/new" className="text-sm font-bold hover:underline">
-              New Research
+              {t.nav.newResearch}
             </Link>
             <Link href="/library" className="text-sm font-bold hover:underline">
-              Journal Library
+              {t.nav.library}
             </Link>
             <Link href="/citations" className="text-sm font-bold hover:underline">
-              Citations
+              {t.nav.citations}
             </Link>
           </div>
 
           <div className="flex items-center gap-2 md:gap-3">
+            {/* Language Switcher - Desktop + Mobile visible */}
+            <div className="flex items-center gap-1.5">
+              <Globe className="w-4 h-4 text-neutral-400 hidden sm:block" />
+              <LangSwitcher />
+            </div>
+
             <Link
               href="/research/new"
-              className="brutal-btn bg-[#F4FF3F] text-[#171717] text-xs px-3 md:px-4 py-2 uppercase font-black"
+              className="brutal-btn bg-[#F4FF3F] text-[#171717] text-xs px-3 md:px-4 py-2 uppercase font-black hidden sm:inline-flex"
             >
-              Mulai Analisis
+              {t.nav.startAnalysis}
+            </Link>
+            <Link
+              href="/research/new"
+              className="brutal-btn bg-[#F4FF3F] text-[#171717] text-xs px-3 py-2 uppercase font-black sm:hidden"
+              aria-label={t.nav.startAnalysis}
+            >
+              {lang === 'id' ? 'Mulai' : 'Start'}
             </Link>
 
             {/* Mobile Hamburger Button */}
@@ -86,8 +127,15 @@ export const Navbar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-x-0 top-[61px] bottom-0 z-40 bg-[#F5F2EA] p-5 flex flex-col justify-between overflow-y-auto border-b-4 border-[#171717] animate-in fade-in slide-in-from-top-4 duration-150">
           <div className="space-y-4">
-            <div className="text-[11px] font-black uppercase tracking-wider text-neutral-500 font-mono">
-              MENU UTAMA
+            <div className="flex items-center justify-between">
+              <div className="text-[11px] font-black uppercase tracking-wider text-neutral-500 font-mono">
+                {t.nav.menu}
+              </div>
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-neutral-500">
+                <Globe className="w-3.5 h-3.5" />
+                <span>Language</span>
+                <LangSwitcher />
+              </div>
             </div>
             <div className="space-y-2">
               {navLinks.map((item) => {
@@ -124,15 +172,16 @@ export const Navbar = () => {
 
 export const Sidebar = () => {
   const pathname = usePathname();
+  const { t } = useLang();
 
   const navItems = [
-    { label: 'Overview', href: '/dashboard', icon: Compass },
-    { label: 'New Research', href: '/research/new', icon: Sparkles },
+    { label: t.nav.overview, href: '/dashboard', icon: Compass },
+    { label: t.nav.newResearch, href: '/research/new', icon: Sparkles },
     { label: 'My Projects', href: '/dashboard#projects', icon: FolderKanban },
-    { label: 'Journal Library', href: '/library', icon: BookOpen },
+    { label: t.nav.journalLibrary, href: '/library', icon: BookOpen },
     { label: 'Citation Hunter', href: '/citations', icon: BookmarkCheck },
     { label: 'Generator', href: '/citations?tab=generator', icon: FileText },
-    { label: 'Settings', href: '/settings', icon: Settings },
+    { label: t.nav.settings, href: '/settings', icon: Settings },
   ];
 
   return (

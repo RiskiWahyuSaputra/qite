@@ -10,9 +10,9 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '48x48' },
-      { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
       { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/logo.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: '/apple-touch-icon.png',
   },
@@ -21,7 +21,20 @@ export const metadata: Metadata = {
     title: 'Qitee — Skripsi Scout AI',
     description: 'AI Research Assistant untuk skripsi — analisis judul/PDF/paragraf, jurnal nyata, sitasi terverifikasi.',
     type: 'website',
-    images: ['/logo.png'],
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Qitee — Skripsi Scout AI',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Qitee — Skripsi Scout AI',
+    description: 'AI Research Assistant untuk skripsi — analisis judul/PDF/paragraf, jurnal nyata, sitasi terverifikasi.',
+    images: ['/og-image.png'],
   },
 };
 

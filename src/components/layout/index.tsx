@@ -63,8 +63,8 @@ export const Navbar = () => {
       <nav className="w-full bg-[#FFFFFF] brutal-border border-t-0 border-x-0 py-3.5 px-4 md:px-6 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
-            <div className="brutal-border bg-white p-1 flex items-center justify-center shrink-0">
-              <Image src="/logo.svg" alt="Qitee logo" width={40} height={40} className="w-9 h-9 md:w-10 md:h-10" priority />
+            <div className="brutal-border bg-white p-1 flex items-center justify-center shrink-0 overflow-hidden">
+              <Image src="/logo.png" alt="Qitee logo" width={40} height={40} className="w-9 h-9 md:w-10 md:h-10 object-contain" priority />
             </div>
             <div>
               <div className="flex items-center gap-1.5">

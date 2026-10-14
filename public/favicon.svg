@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256"><g transform="translate(-8.03 -8.03) scale(1.097)">
+
+<!-- Palette: #171717 black, #F4FF3F yellow, #F5F2EA bg, white. Matches globals.css brutal-border/brutal-shadow. -->
+<!-- Tile with hard shadow offset (no blur), 90deg corners, thick 6px stroke. -->
+<!-- Shadow -->
+<rect x="20" y="20" width="216" height="216" fill="#171717"/>
+<!-- Tile -->
+<rect x="12" y="12" width="216" height="216" fill="white" stroke="#171717" stroke-width="6"/>
+<!-- Inner yellow inset block -->
+<rect x="30" y="30" width="180" height="180" fill="#F4FF3F" stroke="#171717" stroke-width="5"/>
+<!-- Brutalist Q: geometric sans, square terminals, built from rects + polygon — no round corners -->
+<!-- Vertical stem -->
+<rect x="66" y="60" width="28" height="128" fill="#171717"/>
+<!-- Top bar -->
+<rect x="66" y="60" width="84" height="26" fill="#171717"/>
+<!-- Bottom bar -->
+<rect x="66" y="162" width="84" height="26" fill="#171717"/>
+<!-- Right bar (creates O) -->
+<rect x="124" y="60" width="26" height="128" fill="#171717"/>
+<!-- White counter — knockout via evenodd is hard with rects, use white rect centered -->
+<rect x="94" y="86" width="30" height="76" fill="white"/>
+<!-- Q tail — 45deg brutal diagonal -->
+<polygon points="132,152 198,218 182,234 116,168" fill="#171717"/>
+<!-- Citation brackets [ ] centered in counter -->
+<path d="M108 108 H100 V142 H108" fill="none" stroke="#171717" stroke-width="5" stroke-linecap="square"/>
+<path d="M136 108 H144 V142 H136" fill="none" stroke="#171717" stroke-width="5" stroke-linecap="square"/>
+<!-- Center verified dot — small solid square -->
+<rect x="118" y="122" width="10" height="10" fill="#171717"/>
+<!-- SCOUT label tab like navbar: yellow badge on black border (cut out) -->
+<rect x="120" y="30" width="90" height="20" fill="#F4FF3F" stroke="#171717" stroke-width="3"/>
+</g></svg>

@@ -1,6 +1,6 @@
-# Qite — Skripsi Scout AI 🎓⚡
+# Qitee — Skripsi Scout AI 🎓⚡
 
-**Qite (Skripsi Scout AI)** adalah asisten riset skripsi berbasis AI untuk mahasiswa Indonesia. Aplikasi ini membantu menganalisis judul dan draf skripsi (PDF), menemukan jurnal akademik terakreditasi melalui OpenAlex dan Crossref, memverifikasi kutipan riil, serta menyusun daftar pustaka otomatis (APA, IEEE, Harvard, Vancouver).
+**Qitee (Skripsi Scout AI)** adalah asisten riset skripsi berbasis AI untuk mahasiswa Indonesia. Aplikasi ini membantu menganalisis judul dan draf skripsi (PDF), menemukan jurnal akademik terakreditasi melalui OpenAlex dan Crossref, memverifikasi kutipan riil, serta menyusun daftar pustaka otomatis (APA, IEEE, Harvard, Vancouver).
 
 Dibangun dengan estetika **Neo-Brutalism**, backend aman Next.js App Router, integrasi **AI Inference Engine**, dan arsitektur Local-First yang dapat disinkronkan ke **Supabase PostgreSQL**.
 
@@ -46,8 +46,8 @@ Dibangun dengan estetika **Neo-Brutalism**, backend aman Next.js App Router, int
 
 1. **Clone Repository**:
    ```bash
-   git clone https://github.com/RiskiWahyuSaputra/qite.git
-   cd qite
+   git clone https://github.com/RiskiWahyuSaputra/qitee.git
+   cd qitee
    ```
 
 2. **Install Dependencies**:

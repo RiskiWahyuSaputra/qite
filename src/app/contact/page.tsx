@@ -3,8 +3,8 @@ import { BrutalCard, BrutalBadge } from '@/components/brutalist';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Kontak — Qite Skripsi Scout AI',
-  description: 'Hubungi tim Qite untuk pertanyaan, sponsor, atau laporan bug.',
+  title: 'Kontak — Qitee Skripsi Scout AI',
+  description: 'Hubungi tim Qitee untuk pertanyaan, sponsor, atau laporan bug.',
 };
 
 export default function ContactPage() {
@@ -21,7 +21,7 @@ export default function ContactPage() {
         <BrutalCard className="p-6 md:p-8 bg-white space-y-6 text-sm leading-relaxed">
           <section className="space-y-3">
             <h2 className="text-lg font-black">Email Pengembang</h2>
-            <a href="mailto:arskies2005@gmail.com?subject=Kontak%20Qite%20Skripsi" className="inline-block py-2 px-4 bg-[#171717] text-white font-black text-sm brutal-border-sm hover:bg-neutral-800">
+            <a href="mailto:arskies2005@gmail.com?subject=Kontak%20Qitee%20Skripsi" className="inline-block py-2 px-4 bg-[#171717] text-white font-black text-sm brutal-border-sm hover:bg-neutral-800">
               arskies2005@gmail.com
             </a>
             <p className="text-xs font-bold text-neutral-500">Respon biasanya 1–2 hari kerja.</p>
@@ -30,7 +30,7 @@ export default function ContactPage() {
           <section className="space-y-2">
             <h2 className="text-lg font-black">Topik yang Bisa Ditanyakan</h2>
             <ul className="list-disc pl-5 font-bold text-neutral-700 space-y-1">
-              <li>Pertanyaan penggunaan Qite untuk skripsi & sitasi.</li>
+              <li>Pertanyaan penggunaan Qitee untuk skripsi & sitasi.</li>
               <li>Penawaran sponsor / pemasangan iklan (media kit tersedia).</li>
               <li>Laporan bug, request fitur, atau kerja sama akademik.</li>
               <li>Donasi / dukungan via Saweria (link di banner sponsor).</li>
@@ -39,11 +39,11 @@ export default function ContactPage() {
 
           <section className="space-y-2">
             <h2 className="text-lg font-black">Alamat</h2>
-            <p className="font-bold text-neutral-700">Qite Skripsi Scout AI — Project by Riski Wahyu Saputra. Operasional remote / online. Korespondensi via email di atas.</p>
+            <p className="font-bold text-neutral-700">Qitee Skripsi Scout AI — Project by Riski Wahyu Saputra. Operasional remote / online. Korespondensi via email di atas.</p>
           </section>
 
           <div className="pt-4 border-t-2 border-[#171717] flex flex-wrap gap-3 text-xs font-black">
-            <Link href="/about" className="underline">Tentang Qite</Link>
+            <Link href="/about" className="underline">Tentang Qitee</Link>
             <span>•</span>
             <Link href="/privacy" className="underline">Kebijakan Privasi</Link>
             <span>•</span>

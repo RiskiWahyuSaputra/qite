@@ -4,7 +4,7 @@ import './globals.css';
 import { LangProvider } from '@/lib/i18n/LangContext';
 
 export const metadata: Metadata = {
-  title: 'Qite — Skripsi Scout AI | Neo-Brutalism Academic Assistant',
+  title: 'Qitee — Skripsi Scout AI | Neo-Brutalism Academic Assistant',
   description: 'AI Research Assistant untuk membantu mahasiswa menganalisis skripsi, mencari jurnal ilmiah yang relevan, menemukan kutipan yang dapat diverifikasi, dan menyusun daftar pustaka.',
 };
 

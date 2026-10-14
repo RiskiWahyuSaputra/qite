@@ -67,7 +67,7 @@ export const Navbar = () => {
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-black text-xl md:text-2xl tracking-tighter text-[#171717]">QITE</span>
+                <span className="font-black text-xl md:text-2xl tracking-tighter text-[#171717]">QITEE</span>
                 <span className="text-[10px] md:text-xs font-black bg-[#F4FF3F] px-1 py-0.2 border border-[#171717]">SCOUT</span>
               </div>
               <p className="text-[9px] md:text-[10px] font-bold text-neutral-600 tracking-widest uppercase">Skripsi Scout AI</p>
@@ -161,7 +161,7 @@ export const Navbar = () => {
           </div>
 
           <div className="pt-6 border-t-2 border-[#171717] text-xs font-mono text-neutral-600 space-y-1">
-            <div className="font-bold text-[#171717]">Qite — Skripsi Scout AI</div>
+            <div className="font-bold text-[#171717]">Qitee — Skripsi Scout AI</div>
             <div className="text-[11px]">Created by <span className="font-black text-[#171717]">Riski Wahyu Saputra</span></div>
           </div>
         </div>
@@ -228,7 +228,7 @@ export const Sidebar = () => {
       </div>
 
       <div className="pt-4 border-t-2 border-[#171717] text-xs font-mono text-neutral-500 space-y-1">
-        <div className="font-bold text-[#171717]">Qite Skripsi v1.0.0</div>
+        <div className="font-bold text-[#171717]">Qitee Skripsi v1.0.0</div>
         <div className="text-[10px]">Neo-Brutalism Engine</div>
         <div className="text-[10px] text-neutral-700 font-bold pt-1 border-t border-neutral-300">
           Created by <span className="font-black text-[#171717]">Riski Wahyu Saputra</span>
@@ -244,7 +244,7 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
         <div className="space-y-1">
           <div className="flex items-center justify-center md:justify-start gap-2">
-            <span className="font-black text-xl text-[#F4FF3F] font-mono">QITE</span>
+            <span className="font-black text-xl text-[#F4FF3F] font-mono">QITEE</span>
             <span className="text-[10px] font-bold bg-white text-[#171717] px-1.5 py-0.5">SKRIPSI SCOUT AI</span>
           </div>
           <div className="text-xs font-bold text-neutral-300 flex flex-wrap items-center justify-center md:justify-start gap-1">

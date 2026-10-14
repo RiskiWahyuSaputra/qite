@@ -16,7 +16,7 @@ declare global {
 }
 
 /**
- * Komponen Slot Iklan & Monetisasi Qite (Neo-Brutalism Style)
+ * Komponen Slot Iklan & Monetisasi Qitee (Neo-Brutalism Style)
  * Mendukung:
  * 1. Google AdSense Auto Ads (cukup NEXT_PUBLIC_ADSENSE_CLIENT_ID)
  * 2. AdSense dengan slot spesifik (CLIENT_ID + SLOT_ID)
@@ -68,14 +68,14 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot = 'sidebar', className 
         </div>
 
         <div className="space-y-1">
-          <div className="text-xs font-black text-[#171717]">Ingin Pasang Iklan di Qite?</div>
+          <div className="text-xs font-black text-[#171717]">Ingin Pasang Iklan di Qitee?</div>
           <p className="text-[11px] font-bold text-neutral-600 leading-snug">
             Jangkau ribuan mahasiswa yang sedang menyusun skripsi &amp; riset jurnal.
           </p>
         </div>
 
         <a
-          href="mailto:arskies2005@gmail.com?subject=Pasang%20Iklan%20di%20Qite%20Skripsi"
+          href="mailto:arskies2005@gmail.com?subject=Pasang%20Iklan%20di%20Qitee%20Skripsi"
           className="block py-1.5 px-2 bg-[#171717] text-white hover:bg-neutral-800 text-[10px] font-black uppercase text-center brutal-border-sm"
         >
           Hubungi Pengembang
@@ -90,16 +90,16 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot = 'sidebar', className 
       <div className="space-y-0.5 text-center sm:text-left">
         <div className="flex items-center justify-center sm:justify-start gap-1.5">
           <span className="text-[10px] font-black bg-[#171717] text-[#F4FF3F] px-1 font-mono">AD / DONATION</span>
-          <span className="text-xs font-black text-[#171717]">Dukung Pengembangan Qite Skripsi</span>
+          <span className="text-xs font-black text-[#171717]">Dukung Pengembangan Qitee Skripsi</span>
         </div>
         <p className="text-xs font-bold text-neutral-700">
-          Qite gratis untuk seluruh mahasiswa. Anda dapat mendukung server dengan berdonasi atau memasang banner sponsor.
+          Qitee gratis untuk seluruh mahasiswa. Anda dapat mendukung server dengan berdonasi atau memasang banner sponsor.
         </p>
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
         <a
-          href="mailto:arskies2005@gmail.com?subject=Sponsor%20Qite%20Skripsi"
+          href="mailto:arskies2005@gmail.com?subject=Sponsor%20Qitee%20Skripsi"
           className="py-1.5 px-3 bg-white hover:bg-neutral-100 brutal-border-sm text-xs font-black uppercase text-[#171717] flex items-center gap-1"
         >
           <span>Pasang Iklan</span>

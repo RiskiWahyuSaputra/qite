@@ -91,7 +91,7 @@ export default function SettingsPage() {
                 Developed &amp; Designed by Riski Wahyu Saputra
               </div>
               <div className="text-xs font-bold text-neutral-800">
-                © 2026 Qite — Skripsi Scout AI. All rights reserved.
+                © 2026 Qitee — Skripsi Scout AI. All rights reserved.
               </div>
             </BrutalCard>
 

@@ -283,7 +283,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="space-y-2 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2">
-              <span className="font-black text-2xl text-[#F4FF3F] font-mono">QITE</span>
+              <span className="font-black text-2xl text-[#F4FF3F] font-mono">QITEE</span>
               <span className="text-xs font-bold bg-white text-[#171717] px-2 py-0.5">SKRIPSI SCOUT AI</span>
             </div>
             <p className="text-xs text-neutral-400 font-mono">

@@ -3,8 +3,8 @@ import { Navbar, Footer } from '@/components/layout';
 import { BrutalCard, BrutalBadge } from '@/components/brutalist';
 
 export const metadata = {
-  title: 'Tentang Qite — Skripsi Scout AI',
-  description: 'Tentang Qite Skripsi Scout AI — asisten riset untuk mahasiswa Indonesia.',
+  title: 'Tentang Qitee — Skripsi Scout AI',
+  description: 'Tentang Qitee Skripsi Scout AI — asisten riset untuk mahasiswa Indonesia.',
 };
 
 export default function AboutPage() {
@@ -14,15 +14,15 @@ export default function AboutPage() {
       <main className="flex-1 max-w-4xl mx-auto w-full p-6 md:p-8 space-y-6">
         <div className="pb-6 border-b-3 border-[#171717]">
           <BrutalBadge variant="yellow">ABOUT</BrutalBadge>
-          <h1 className="text-3xl md:text-4xl font-black mt-2">Tentang Qite</h1>
+          <h1 className="text-3xl md:text-4xl font-black mt-2">Tentang Qitee</h1>
           <p className="text-sm font-bold text-neutral-600 mt-1">Skripsi Scout AI — Asisten Riset untuk Mahasiswa Indonesia</p>
         </div>
 
         <BrutalCard className="p-6 md:p-8 bg-white space-y-6 text-sm leading-relaxed">
           <section className="space-y-2">
-            <h2 className="text-lg font-black">Apa itu Qite?</h2>
+            <h2 className="text-lg font-black">Apa itu Qitee?</h2>
             <p className="font-bold text-neutral-700">
-              Qite adalah AI Research Assistant yang membantu mahasiswa menganalisis judul/PDF/paragraf skripsi, mencari jurnal ilmiah nyata (OpenAlex, Crossref, Semantic Scholar), memetakan sitasi per kalimat dan per BAB, serta menghasilkan daftar pustaka (APA, IEEE, Harvard, Vancouver, BibTeX, RIS) dan matriks penelitian terdahulu untuk BAB II.
+              Qitee adalah AI Research Assistant yang membantu mahasiswa menganalisis judul/PDF/paragraf skripsi, mencari jurnal ilmiah nyata (OpenAlex, Crossref, Semantic Scholar), memetakan sitasi per kalimat dan per BAB, serta menghasilkan daftar pustaka (APA, IEEE, Harvard, Vancouver, BibTeX, RIS) dan matriks penelitian terdahulu untuk BAB II.
             </p>
           </section>
 

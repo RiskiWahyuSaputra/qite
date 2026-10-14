@@ -3,8 +3,8 @@ import { Navbar, Footer } from '@/components/layout';
 import { BrutalCard, BrutalBadge } from '@/components/brutalist';
 
 export const metadata = {
-  title: 'Kebijakan Privasi — Qite Skripsi Scout AI',
-  description: 'Kebijakan privasi Qite: bagaimana data riset, PDF, dan informasi pengguna dikelola.',
+  title: 'Kebijakan Privasi — Qitee Skripsi Scout AI',
+  description: 'Kebijakan privasi Qitee: bagaimana data riset, PDF, dan informasi pengguna dikelola.',
 };
 
 export default function PrivacyPage() {
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
           <section className="space-y-2">
             <h2 className="text-lg font-black">1. Pengumpulan Data</h2>
             <p className="font-bold text-neutral-700">
-              Qite beroperasi dengan prinsip <strong>Local-First</strong>. Judul skripsi, paragraf, file PDF, dan hasil pencarian jurnal disimpan di <code className="bg-neutral-100 px-1">localStorage</code> browser Anda. Kami tidak menyimpan dokumen PDF di server secara permanen — file diproses di memori dan dibuang setelah analisis selesai.
+              Qitee beroperasi dengan prinsip <strong>Local-First</strong>. Judul skripsi, paragraf, file PDF, dan hasil pencarian jurnal disimpan di <code className="bg-neutral-100 px-1">localStorage</code> browser Anda. Kami tidak menyimpan dokumen PDF di server secara permanen — file diproses di memori dan dibuang setelah analisis selesai.
             </p>
             <ul className="list-disc pl-5 font-bold text-neutral-700 space-y-1">
               <li>Data yang dikirim ke AI (Groq) hanya potongan teks yang diproses untuk menghasilkan variabel, keywords, dan query pencarian — bukan file utuh.</li>
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
           <section className="space-y-2">
             <h2 className="text-lg font-black">3. Google AdSense</h2>
             <p className="font-bold text-neutral-700">
-              Qite menampilkan iklan melalui Google AdSense. Google dapat menggunakan cookie untuk menampilkan iklan yang relevan. Anda dapat mengelola preferensi iklan di <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-[#3454FF] underline">Google Ad Settings</a>. File <code>ads.txt</code> tersedia di <code>/ads.txt</code>.
+              Qitee menampilkan iklan melalui Google AdSense. Google dapat menggunakan cookie untuk menampilkan iklan yang relevan. Anda dapat mengelola preferensi iklan di <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-[#3454FF] underline">Google Ad Settings</a>. File <code>ads.txt</code> tersedia di <code>/ads.txt</code>.
             </p>
           </section>
 
@@ -61,7 +61,7 @@ export default function PrivacyPage() {
           <div className="pt-4 border-t-2 border-[#171717] flex gap-3 text-xs font-black">
             <Link href="/terms" className="underline">Syarat Layanan</Link>
             <span>•</span>
-            <Link href="/about" className="underline">Tentang Qite</Link>
+            <Link href="/about" className="underline">Tentang Qitee</Link>
             <span>•</span>
             <Link href="/contact" className="underline">Kontak</Link>
           </div>

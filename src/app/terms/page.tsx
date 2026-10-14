@@ -3,8 +3,8 @@ import { Navbar, Footer } from '@/components/layout';
 import { BrutalCard, BrutalBadge } from '@/components/brutalist';
 
 export const metadata = {
-  title: 'Syarat Layanan — Qite Skripsi Scout AI',
-  description: 'Syarat dan ketentuan penggunaan Qite Skripsi Scout AI.',
+  title: 'Syarat Layanan — Qitee Skripsi Scout AI',
+  description: 'Syarat dan ketentuan penggunaan Qitee Skripsi Scout AI.',
 };
 
 export default function TermsPage() {
@@ -21,12 +21,12 @@ export default function TermsPage() {
         <BrutalCard className="p-6 md:p-8 bg-white space-y-6 text-sm leading-relaxed">
           <section className="space-y-2">
             <h2 className="text-lg font-black">1. Penerimaan Syarat</h2>
-            <p className="font-bold text-neutral-700">Dengan mengakses Qite Anda menyetujui syarat ini. Jika tidak setuju, jangan gunakan layanan.</p>
+            <p className="font-bold text-neutral-700">Dengan mengakses Qitee Anda menyetujui syarat ini. Jika tidak setuju, jangan gunakan layanan.</p>
           </section>
           <section className="space-y-2">
             <h2 className="text-lg font-black">2. Layanan Akademik — Bukan Pengganti Pembimbing</h2>
             <p className="font-bold text-neutral-700">
-              Qite adalah asisten riset berbasis AI. Hasil analisis variabel, rekomendasi jurnal, parafrasa, dan matriks penelitian terdahulu bersifat <strong>bantuan</strong> dan wajib diverifikasi ke sumber asli dan pembimbing akademik. Kutipan bertipe <em>paraphrase</em> diberi label peringatan dan harus diperiksa ulang sebelum dikutip di skripsi.
+              Qitee adalah asisten riset berbasis AI. Hasil analisis variabel, rekomendasi jurnal, parafrasa, dan matriks penelitian terdahulu bersifat <strong>bantuan</strong> dan wajib diverifikasi ke sumber asli dan pembimbing akademik. Kutipan bertipe <em>paraphrase</em> diberi label peringatan dan harus diperiksa ulang sebelum dikutip di skripsi.
             </p>
           </section>
           <section className="space-y-2">
@@ -34,12 +34,12 @@ export default function TermsPage() {
             <ul className="list-disc pl-5 font-bold text-neutral-700 space-y-1">
               <li>Jangan mengunggah dokumen yang melanggar hak cipta pihak lain tanpa izin.</li>
               <li>Jangan melakukan scraping / abuse terhadap endpoint API.</li>
-              <li>Jangan menggunakan Qite untuk plagiarisme — selalu sitasi sumber asli.</li>
+              <li>Jangan menggunakan Qitee untuk plagiarisme — selalu sitasi sumber asli.</li>
             </ul>
           </section>
           <section className="space-y-2">
             <h2 className="text-lg font-black">4. Kekayaan Intelektual</h2>
-            <p className="font-bold text-neutral-700">Kode Qite © 2026 Riski Wahyu Saputra. Metadata jurnal berasal dari OpenAlex, Crossref, Semantic Scholar dengan lisensi masing-masing.</p>
+            <p className="font-bold text-neutral-700">Kode Qitee © 2026 Riski Wahyu Saputra. Metadata jurnal berasal dari OpenAlex, Crossref, Semantic Scholar dengan lisensi masing-masing.</p>
           </section>
           <section className="space-y-2">
             <h2 className="text-lg font-black">5. Batasan Tanggung Jawab</h2>

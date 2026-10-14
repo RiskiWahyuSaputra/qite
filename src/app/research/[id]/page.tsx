@@ -21,6 +21,7 @@ import {
   Check,
   Copy,
   ChevronRight,
+  ChevronLeft,
   Filter,
   FileDown,
   Layers,
@@ -40,6 +41,8 @@ export default function ResearchDetailPage() {
   const [selectedJournal, setSelectedJournal] = useState<JournalReference | null>(null);
   const [activeChapterFilter, setActiveChapterFilter] = useState<string>('ALL');
   const [sortOption, setSortOption] = useState<'relevance' | 'year' | 'citations'>('relevance');
+  const PAGE_SIZE = 6;
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Citations Hunter State
   const [generatingCitations, setGeneratingCitations] = useState(false);
@@ -200,6 +203,11 @@ export default function ResearchDetailPage() {
     setTimeout(() => setCopiedFormat(null), 2000);
   };
 
+  // Reset to page 1 when filter/sort changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeChapterFilter, sortOption]);
+
   // Filter & Sort Journals
   let displayedJournals = [...(project.journals || [])];
   if (activeChapterFilter !== 'ALL') {
@@ -212,6 +220,11 @@ export default function ResearchDetailPage() {
     if (sortOption === 'citations') return (b.citation_count || 0) - (a.citation_count || 0);
     return 0;
   });
+
+  // Pagination
+  const totalPages = Math.max(1, Math.ceil(displayedJournals.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedJournals = displayedJournals.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const selectedCitations = (project.saved_citations || []).filter(
     (c) => c.journal_id === selectedJournal?.id
@@ -407,8 +420,9 @@ export default function ResearchDetailPage() {
               </p>
             </BrutalCard>
           ) : (
+            <>
             <div className="space-y-3">
-              {displayedJournals.map((j) => {
+              {paginatedJournals.map((j) => {
                 const isSelected = selectedJournal?.id === j.id;
                 return (
                   <div
@@ -539,6 +553,49 @@ export default function ResearchDetailPage() {
                 );
               })}
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between gap-2 pt-2">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={safePage === 1}
+                  className={`flex items-center gap-1 px-3 py-2 brutal-border-sm text-xs font-black uppercase ${safePage === 1 ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed' : 'bg-white hover:bg-neutral-100 text-[#171717]'}`}
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span>Prev</span>
+                </button>
+
+                <div className="flex items-center gap-1.5">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-8 h-8 brutal-border-sm text-xs font-black font-mono ${page === safePage ? 'bg-[#171717] text-white' : 'bg-white hover:bg-neutral-100 text-[#171717]'}`}
+                      aria-label={`Halaman ${page}`}
+                      aria-current={page === safePage ? 'page' : undefined}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={safePage === totalPages}
+                  className={`flex items-center gap-1 px-3 py-2 brutal-border-sm text-xs font-black uppercase ${safePage === totalPages ? 'bg-neutral-100 text-neutral-400 cursor-not-allowed' : 'bg-white hover:bg-neutral-100 text-[#171717]'}`}
+                >
+                  <span>Next</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
+            <div className="text-[11px] font-mono font-bold text-neutral-500 text-center">
+              Menampilkan {(safePage - 1) * PAGE_SIZE + 1}–{Math.min(safePage * PAGE_SIZE, displayedJournals.length)} dari {displayedJournals.length} jurnal
+              {activeChapterFilter !== 'ALL' ? ` • Filter: ${activeChapterFilter}` : ''}
+            </div>
+            </>
           )}
         </section>
 

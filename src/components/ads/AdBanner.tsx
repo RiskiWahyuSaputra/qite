@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrutalCard } from '@/components/brutalist';
 import { ExternalLink, Sparkles } from 'lucide-react';
 
@@ -9,27 +9,44 @@ interface AdBannerProps {
   className?: string;
 }
 
+declare global {
+  interface Window {
+    adsbygoogle?: unknown[];
+  }
+}
+
 /**
  * Komponen Slot Iklan & Monetisasi Qite (Neo-Brutalism Style)
  * Mendukung:
- * 1. Google AdSense (jika NEXT_PUBLIC_ADSENSE_CLIENT_ID diisi)
- * 2. Sponsor Akademik / Jasa Skripsi / Turnitin / Afiliasi
- * 3. Saweria / QRIS Donasi Mahasiswa
+ * 1. Google AdSense Auto Ads (cukup NEXT_PUBLIC_ADSENSE_CLIENT_ID)
+ * 2. AdSense dengan slot spesifik (CLIENT_ID + SLOT_ID)
+ * 3. Fallback Sponsor Akademik / Saweria jika belum ada env
  */
 export const AdBanner: React.FC<AdBannerProps> = ({ slot = 'sidebar', className = '' }) => {
   const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
   const adsenseSlot = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID;
 
-  // Jika Google AdSense sudah aktif di env
-  if (adsenseClient && adsenseSlot) {
+  useEffect(() => {
+    if (!adsenseClient) return;
+    try {
+      if (typeof window !== 'undefined' && window.adsbygoogle) {
+        (window.adsbygoogle as unknown[]).push({});
+      }
+    } catch {
+      // AdSense belum ready, ignore
+    }
+  }, [adsenseClient]);
+
+  // Jika Google AdSense sudah aktif — cukup CLIENT_ID saja (Auto Ads support)
+  if (adsenseClient) {
     return (
-      <div className={`p-2 bg-white brutal-border-sm text-center ${className}`}>
+      <div className={`p-2 bg-white brutal-border-sm text-center overflow-hidden ${className}`}>
         <span className="text-[9px] font-mono text-neutral-400 block mb-1 uppercase tracking-wider">SPONSORED ADVERTISEMENT</span>
         <ins
           className="adsbygoogle"
           style={{ display: 'block' }}
           data-ad-client={adsenseClient}
-          data-ad-slot={adsenseSlot}
+          {...(adsenseSlot ? { 'data-ad-slot': adsenseSlot } : {})}
           data-ad-format="auto"
           data-full-width-responsive="true"
         />

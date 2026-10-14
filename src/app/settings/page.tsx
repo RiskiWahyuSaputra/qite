@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
+import { clearAllQiteData } from '@/lib/storage';
 import { Settings, Shield, Cpu, Database, Trash2, CheckCircle2 } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -10,7 +11,7 @@ export default function SettingsPage() {
 
   const handleClearLocalStorage = () => {
     if (confirm('Hapus seluruh riwayat riset, jurnal, dan kutipan dari browser Anda?')) {
-      localStorage.clear();
+      clearAllQiteData();
       setCleared(true);
       setTimeout(() => setCleared(false), 3000);
     }

@@ -144,6 +144,8 @@ function NewResearchForm() {
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('startYear', startYear);
+      formData.append('endYear', endYear);
 
       const res = await fetch('/api/research/upload', {
         method: 'POST',

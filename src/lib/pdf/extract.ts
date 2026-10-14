@@ -23,8 +23,8 @@ export async function extractTextFromPDF(buffer: Buffer): Promise<ExtractedPDFRe
       .trim();
 
     const charCount = cleanText.length;
-    // Heuristic: If fewer than 150 characters for a whole multi-page doc, likely scanned image
-    const hasReadableText = charCount > 100;
+    // Require at least 300 chars; scanned cover alone ~80-150 chars should be rejected
+    const hasReadableText = charCount > 300;
 
     return {
       text: cleanText,

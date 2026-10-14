@@ -11,6 +11,9 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File | null;
+    const startYear = formData.get('startYear') ? parseInt(String(formData.get('startYear'))) : undefined;
+    const endYear = formData.get('endYear') ? parseInt(String(formData.get('endYear'))) : undefined;
+    const yearRange = (startYear || endYear) ? { startYear, endYear } : undefined;
 
     if (!file) {
       return NextResponse.json({ error: 'File dokumen PDF wajib diunggah.' }, { status: 400 });
@@ -138,7 +141,8 @@ ${chunks.methodChunk}`;
       {
         title: docTitle,
         field: analysisResult.field_of_study || 'Penelitian Akademik',
-      }
+      },
+      yearRange
     );
 
     const projectId = `proj-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`;

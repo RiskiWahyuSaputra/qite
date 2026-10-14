@@ -6,6 +6,7 @@ import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { getStoredProjects, saveProjectToStorage } from '@/lib/storage';
 import { JournalReference, ResearchProject } from '@/types';
+import { AdBanner } from '@/components/ads/AdBanner';
 import { BookOpen, ExternalLink, BookmarkCheck, Trash2, ArrowUpRight, Search } from 'lucide-react';
 
 export default function LibraryPage() {
@@ -43,7 +44,7 @@ export default function LibraryPage() {
     setProjects(updated);
     updated.forEach((p) => saveProjectToStorage(p));
 
-    setSavedJournals((prev) => prev.filter((item) => item.journal.id !== journalId));
+    setSavedJournals((prev) => prev.filter((item) => !(item.projectId === projectId && item.journal.id === journalId)));
   };
 
   const filtered = savedJournals.filter((item) =>
@@ -85,6 +86,8 @@ export default function LibraryPage() {
               </div>
             </div>
           </div>
+
+          <AdBanner slot="content-inline" />
 
           {filtered.length === 0 ? (
             <BrutalCard className="p-12 text-center bg-white space-y-4">

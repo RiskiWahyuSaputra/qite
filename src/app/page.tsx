@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
+import { AdBanner } from '@/components/ads/AdBanner';
 import {
   Sparkles,
   ArrowRight,
@@ -120,6 +121,11 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Inline Ad — Landing */}
+      <div className="max-w-7xl mx-auto w-full px-6">
+        <AdBanner slot="content-inline" className="my-6" />
+      </div>
+
       {/* Dual Mode Section */}
       <section className="bg-white border-y-3 border-[#171717] py-16 px-6">
         <div className="max-w-7xl mx-auto space-y-12">
@@ -133,7 +139,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Mode A */}
             <BrutalCard className="p-8 space-y-4 hover:-translate-y-1 transition-transform">
               <div className="w-12 h-12 bg-[#F4FF3F] text-[#171717] flex items-center justify-center font-black text-xl brutal-border">
@@ -190,6 +196,36 @@ export default function LandingPage() {
               <Link href="/research/new?mode=pdf" className="block pt-4">
                 <BrutalButton variant="coral" className="w-full">
                   Unggah PDF Skripsi
+                </BrutalButton>
+              </Link>
+            </BrutalCard>
+
+            {/* Mode C — Paragraph Scan */}
+            <BrutalCard className="p-8 space-y-4 hover:-translate-y-1 transition-transform bg-[#FF6B5E]/10 border-[#FF6B5E]">
+              <div className="w-12 h-12 bg-[#FF6B5E] text-white flex items-center justify-center font-black text-xl brutal-border">
+                C
+              </div>
+              <h3 className="text-2xl font-black">MODE C — Scan Paragraf Klaim</h3>
+              <p className="text-sm font-bold text-neutral-700 leading-relaxed">
+                Paste satu paragraf skripsi. AI bedah kalimat mana yang butuh sitasi, cari jurnal nyata, dan tunjukkan persis kalimat mana yang harus dikutip.
+              </p>
+              <ul className="text-xs font-bold space-y-2 pt-2 text-neutral-800">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  Deteksi klaim per kalimat
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  Mapping jurnal → kalimat spesifik
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  Rekomendasi in-text citation
+                </li>
+              </ul>
+              <Link href="/research/new?mode=paragraph" className="block pt-4">
+                <BrutalButton variant="coral" className="w-full">
+                  Scan Paragraf Sekarang
                 </BrutalButton>
               </Link>
             </BrutalCard>
@@ -268,6 +304,11 @@ export default function LandingPage() {
             <Link href="/library" className="hover:text-[#F4FF3F]">Library</Link>
             <Link href="/citations" className="hover:text-[#F4FF3F]">Citations</Link>
             <Link href="/settings" className="hover:text-[#F4FF3F]">Settings</Link>
+            <span className="text-neutral-600">|</span>
+            <Link href="/about" className="hover:text-[#F4FF3F]">About</Link>
+            <Link href="/privacy" className="hover:text-[#F4FF3F]">Privacy</Link>
+            <Link href="/terms" className="hover:text-[#F4FF3F]">Terms</Link>
+            <Link href="/contact" className="hover:text-[#F4FF3F]">Contact</Link>
           </div>
         </div>
       </footer>

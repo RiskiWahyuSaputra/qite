@@ -6,12 +6,13 @@ import { callGroqStructured } from '@/lib/ai/groq';
 import { determineAcademicBadges } from './badges';
 
 /**
- * Normalizes title string for duplicate checking
+ * Normalizes title string for duplicate checking — keeps word boundaries
  */
 function normalizeTitle(t: string): string {
   return t
     .toLowerCase()
-    .replace(/[^a-z0-9]/g, '')
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
 }
 

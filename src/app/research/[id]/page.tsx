@@ -9,6 +9,7 @@ import { getStoredProjectById, saveProjectToStorage } from '@/lib/storage';
 import { formatAPA, formatIEEE, formatHarvard, formatVancouver, generateBibTeX, generateRIS } from '@/lib/citations/formatter';
 import { getPdfDirectOrFallback } from '@/lib/academic/pdf-resolver';
 import { determineAcademicBadges } from '@/lib/academic/badges';
+import { AdBanner } from '@/components/ads/AdBanner';
 import { ResearchProject, JournalReference, CitationItem, PriorLiteratureItem } from '@/types';
 import {
   Sparkles,
@@ -61,6 +62,14 @@ export default function ResearchDetailPage() {
     }
   }, [projectId]);
 
+  // Close matrix modal on Escape
+  useEffect(() => {
+    if (!showMatrixModal) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowMatrixModal(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showMatrixModal]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col bg-[#F5F2EA]">
@@ -91,17 +100,18 @@ export default function ResearchDetailPage() {
     );
   }
 
-  // Toggle Save Journal
+  // Toggle Save Journal — re-read from storage to avoid lost-update race
   const toggleSaveJournal = (journalId: string) => {
     if (!project) return;
-    const updatedJournals = project.journals.map((j) => {
+    const latest = getStoredProjectById(project.id) || project;
+    const updatedJournals = latest.journals.map((j) => {
       if (j.id === journalId) {
         return { ...j, is_saved: !j.is_saved };
       }
       return j;
     });
 
-    const updatedProj = { ...project, journals: updatedJournals };
+    const updatedProj = { ...latest, journals: updatedJournals };
     setProject(updatedProj);
     saveProjectToStorage(updatedProj);
     if (selectedJournal?.id === journalId) {
@@ -126,11 +136,13 @@ export default function ResearchDetailPage() {
       });
 
       const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Gagal generate matrix');
       if (data.matrix) {
+        const latest = getStoredProjectById(project.id) || project;
         const updatedProj: ResearchProject = {
-          ...project,
+          ...latest,
           analysis: {
-            ...project.analysis,
+            ...latest.analysis!,
             literature_matrix: data.matrix,
           },
         };
@@ -140,15 +152,15 @@ export default function ResearchDetailPage() {
       }
     } catch (err) {
       console.error('Error generating matrix:', err);
-      alert('Gagal menghasilkan matriks penelitian terdahulu.');
+      alert(err instanceof Error ? err.message : 'Gagal menghasilkan matriks penelitian terdahulu.');
     } finally {
       setGeneratingMatrix(false);
     }
   };
 
-  // Run Citation Hunter with Groq AI
+  // Run Citation Hunter with Groq AI — re-read to avoid lost update
   const handleGenerateCitations = async () => {
-    if (!selectedJournal) return;
+    if (!selectedJournal || !project) return;
     setGeneratingCitations(true);
 
     try {
@@ -164,11 +176,11 @@ export default function ResearchDetailPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      // Append citations to project
       const newCits = data.citations as CitationItem[];
-      const existingCits = project.saved_citations || [];
+      const latest = getStoredProjectById(project.id) || project;
+      const existingCits = latest.saved_citations || [];
       const updatedProj = {
-        ...project,
+        ...latest,
         saved_citations: [...existingCits, ...newCits],
       };
 
@@ -532,6 +544,7 @@ export default function ResearchDetailPage() {
 
         {/* PANEL KANAN: Detail, Citation Hunter & Generator (Col 9-12) */}
         <section className="lg:col-span-4 space-y-4">
+          <AdBanner slot="content-inline" />
           {selectedJournal ? (
             <BrutalCard className="p-5 bg-white space-y-5 sticky top-20">
               {/* Header Jurnal */}
@@ -841,8 +854,19 @@ export default function ResearchDetailPage() {
 
       {/* MODAL MATRIKS PENELITIAN TERDAHULU (BAB II) */}
       {showMatrixModal && project?.analysis?.literature_matrix && (
-        <div className="fixed inset-0 z-50 bg-[#171717]/80 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#F5F2EA] brutal-border border-4 max-w-5xl w-full p-6 space-y-5 my-8 max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 z-50 bg-[#171717]/80 flex items-center justify-center p-4 overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Matriks Penelitian Terdahulu"
+          onClick={() => setShowMatrixModal(false)}
+          onKeyDown={(e) => { if (e.key === 'Escape') setShowMatrixModal(false); }}
+          tabIndex={-1}
+        >
+          <div
+            className="bg-[#F5F2EA] brutal-border border-4 max-w-5xl w-full p-6 space-y-5 my-8 max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between pb-3 border-b-3 border-[#171717]">
               <div>
                 <div className="flex items-center gap-2">

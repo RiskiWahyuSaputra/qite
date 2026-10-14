@@ -31,6 +31,10 @@ export async function searchCrossref(
 
   if (yearRange?.startYear && yearRange?.endYear) {
     url += `&filter=from-pub-date:${yearRange.startYear}-01-01,until-pub-date:${yearRange.endYear}-12-31`;
+  } else if (yearRange?.startYear) {
+    url += `&filter=from-pub-date:${yearRange.startYear}-01-01`;
+  } else if (yearRange?.endYear) {
+    url += `&filter=until-pub-date:${yearRange.endYear}-12-31`;
   }
 
   try {

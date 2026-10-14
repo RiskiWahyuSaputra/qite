@@ -1,4 +1,4 @@
-import { JournalReference, CitationItem } from '@/types';
+import { JournalReference, CitationItem, Author } from '@/types';
 
 /**
  * Clean and format author list according to standard conventions
@@ -85,21 +85,29 @@ export function formatInText(journal: JournalReference): string {
   return `(${authorStr}, ${yearStr})`;
 }
 
+function authorToString(a: string | Author): string {
+  if (typeof a === 'string') return a;
+  if (a.name) return a.name;
+  if (a.family && a.given) return `${a.family}, ${a.given}`;
+  return a.family || a.given || 'Unknown';
+}
+
 /**
  * Generate BibTeX string for export
  */
 export function generateBibTeX(journal: JournalReference): string {
-  const cleanId = (journal.authors[0] ? (typeof journal.authors[0] === 'string' ? journal.authors[0].split(' ')[0] : 'author') : 'ref') + (journal.year || '2024');
+  const firstAuthor = journal.authors[0] ? authorToString(journal.authors[0] as string | Author).split(' ')[0] : 'ref';
+  const cleanId = firstAuthor + (journal.year || '2024');
   const safeId = cleanId.toLowerCase().replace(/[^a-z0-9]/g, '');
 
   return `@article{${safeId},
-  author    = {${journal.authors.join(' and ')}},
-  title     = {${journal.title}},
-  journal   = {${journal.venue || 'Academic Journal'}},
-  year      = {${journal.year || ''}},
-  doi       = {${journal.doi || ''}},
-  url       = {${journal.url || ''}}
-}`;
+   author    = {${journal.authors.map((a) => authorToString(a as string | Author)).join(' and ')}},
+   title     = {${journal.title}},
+   journal   = {${journal.venue || 'Academic Journal'}},
+   year      = {${journal.year || ''}},
+   doi       = {${journal.doi || ''}},
+   url       = {${journal.url || ''}}
+ }`;
 }
 
 /**
@@ -109,7 +117,7 @@ export function generateRIS(journal: JournalReference): string {
   const lines = [
     'TY  - JOUR',
     `TI  - ${journal.title}`,
-    ...journal.authors.map((a) => `AU  - ${typeof a === 'string' ? a : a.name || 'Author'}`),
+    ...journal.authors.map((a) => `AU  - ${authorToString(a as string | Author)}`),
     journal.venue ? `JO  - ${journal.venue}` : '',
     journal.year ? `PY  - ${journal.year}` : '',
     journal.doi ? `DO  - ${journal.doi}` : '',

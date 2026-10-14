@@ -74,7 +74,7 @@ export async function searchSemanticScholar(
         abstract: paper.abstract,
         url: webUrl,
         pdf_url: pdfUrl,
-        source: 'openalex' as const, // normalized
+        source: 'merged' as const,
         citation_count: paper.citationCount || 0,
         is_open_access: paper.isOpenAccess || !!pdfUrl,
       };

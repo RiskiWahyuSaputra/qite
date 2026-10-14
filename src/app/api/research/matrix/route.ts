@@ -20,10 +20,10 @@ export async function POST(req: Request) {
       success: true,
       matrix,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('API Matrix Generation Error:', error);
     return NextResponse.json(
-      { error: error?.message || 'Gagal menghasilkan matriks penelitian terdahulu.' },
+      { error: error instanceof Error ? error.message : 'Gagal menghasilkan matriks penelitian terdahulu.' },
       { status: 500 }
     );
   }

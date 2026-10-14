@@ -262,6 +262,11 @@ export const Footer = () => {
           <Link href="/library" className="hover:text-[#F4FF3F]">Library</Link>
           <Link href="/citations" className="hover:text-[#F4FF3F]">Citations</Link>
           <Link href="/settings" className="hover:text-[#F4FF3F]">Settings</Link>
+          <span className="text-neutral-600">|</span>
+          <Link href="/about" className="hover:text-[#F4FF3F]">About</Link>
+          <Link href="/privacy" className="hover:text-[#F4FF3F]">Privacy</Link>
+          <Link href="/terms" className="hover:text-[#F4FF3F]">Terms</Link>
+          <Link href="/contact" className="hover:text-[#F4FF3F]">Contact</Link>
         </div>
       </div>
     </footer>

@@ -92,9 +92,9 @@ export const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2 md:gap-3">
-            {/* Language Switcher - Desktop + Mobile visible */}
-            <div className="flex items-center gap-1.5">
-              <Globe className="w-4 h-4 text-neutral-400 hidden sm:block" />
+            {/* Language Switcher - Desktop only, hidden on mobile (moved into hamburger) */}
+            <div className="hidden md:flex items-center gap-1.5">
+              <Globe className="w-4 h-4 text-neutral-400" />
               <LangSwitcher />
             </div>
 

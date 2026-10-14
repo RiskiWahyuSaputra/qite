@@ -73,6 +73,11 @@ export default function ResearchDetailPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, [showMatrixModal]);
 
+  // Reset to page 1 when filter/sort changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeChapterFilter, sortOption]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col bg-[#F5F2EA]">
@@ -202,11 +207,6 @@ export default function ResearchDetailPage() {
     setCopiedFormat(label);
     setTimeout(() => setCopiedFormat(null), 2000);
   };
-
-  // Reset to page 1 when filter/sort changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [activeChapterFilter, sortOption]);
 
   // Filter & Sort Journals
   let displayedJournals = [...(project.journals || [])];

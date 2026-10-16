@@ -6,6 +6,9 @@ import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { clearAllQiteData } from '@/lib/storage';
 import { Settings, Shield, Cpu, Database, Trash2, CheckCircle2 } from 'lucide-react';
 
+// Kartu "Konfigurasi AI & Academic API" disembunyikan; ubah ke true untuk menampilkannya lagi.
+const SHOW_AI_CONFIG = false;
+
 export default function SettingsPage() {
   const [cleared, setCleared] = useState(false);
 
@@ -39,6 +42,7 @@ export default function SettingsPage() {
 
           <div className="space-y-6">
             {/* System Status Card */}
+            {SHOW_AI_CONFIG && (
             <BrutalCard className="p-6 bg-white space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b-2 border-[#171717]">
                 <Cpu className="w-5 h-5 text-[#3454FF]" />
@@ -69,6 +73,7 @@ export default function SettingsPage() {
                 </div>
               </div>
             </BrutalCard>
+            )}
 
             {/* Supabase Status */}
             <BrutalCard className="p-6 bg-white space-y-4">

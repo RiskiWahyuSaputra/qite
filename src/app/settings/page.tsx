@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { clearAllQiteData } from '@/lib/storage';
-import { Settings, Shield, Cpu, Database, Trash2, CheckCircle2 } from 'lucide-react';
+import { Settings, Shield, Cpu, Trash2, CheckCircle2 } from 'lucide-react';
 
 // Kartu "Konfigurasi AI & Academic API" disembunyikan; ubah ke true untuk menampilkannya lagi.
 const SHOW_AI_CONFIG = false;
@@ -74,18 +74,6 @@ export default function SettingsPage() {
               </div>
             </BrutalCard>
             )}
-
-            {/* Supabase Status */}
-            <BrutalCard className="p-6 bg-white space-y-4">
-              <div className="flex items-center gap-2 pb-2 border-b-2 border-[#171717]">
-                <Database className="w-5 h-5 text-emerald-600" />
-                <h3 className="text-lg font-black">Database Cloud (Supabase PostgreSQL)</h3>
-              </div>
-
-              <p className="text-xs font-bold text-neutral-600 leading-relaxed">
-                Aplikasi mendukung mode Local-First tanpa kewajiban akun, serta siap disinkronisasi ke PostgreSQL Supabase menggunakan file migrasi yang telah disediakan di folder <code>supabase/migrations/</code>.
-              </p>
-            </BrutalCard>
 
             {/* Author & License Card */}
             <BrutalCard className="p-6 bg-[#F4FF3F] space-y-2">

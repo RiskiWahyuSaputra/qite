@@ -6,7 +6,6 @@ import { Navbar, Sidebar, Footer } from '@/components/layout';
 import { BrutalButton, BrutalBadge, BrutalCard } from '@/components/brutalist';
 import { getStoredProjects, saveProjectToStorage } from '@/lib/storage';
 import { CitationItem, ResearchProject } from '@/types';
-import { AdBanner } from '@/components/ads/AdBanner';
 import { Quote, Copy, Check, Trash2, FileDown, BookOpen } from 'lucide-react';
 
 export default function CitationsPage() {
@@ -71,8 +70,6 @@ export default function CitationsPage() {
               </p>
             </div>
           </div>
-
-          <AdBanner slot="content-inline" />
 
           {citations.length === 0 ? (
             <BrutalCard className="p-12 text-center bg-white space-y-4">

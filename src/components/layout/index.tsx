@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { BrutalBadge } from '@/components/brutalist';
-import { AdBanner } from '@/components/ads/AdBanner';
 import { useLang } from '@/lib/i18n/LangContext';
 
 function LangSwitcher() {
@@ -55,6 +54,7 @@ export const Navbar = () => {
     { label: t.nav.newResearch, href: '/research/new', icon: Sparkles },
     { label: t.nav.journalLibrary, href: '/library', icon: BookOpen },
     { label: t.nav.citationsRadar, href: '/citations', icon: BookmarkCheck },
+    { label: 'Blog', href: '/blog', icon: FileText },
     { label: t.nav.settings, href: '/settings', icon: Settings },
   ];
 
@@ -88,6 +88,9 @@ export const Navbar = () => {
             </Link>
             <Link href="/citations" className="text-sm font-bold hover:underline">
               {t.nav.citations}
+            </Link>
+            <Link href="/blog" className="text-sm font-bold hover:underline">
+              Blog
             </Link>
           </div>
 
@@ -224,8 +227,6 @@ export const Sidebar = () => {
           </div>
         </div>
 
-        {/* Slot Iklan / Sponsor Sidebar */}
-        <AdBanner slot="sidebar" />
       </div>
 
       <div className="pt-4 border-t-2 border-[#171717] text-xs font-mono text-neutral-500 space-y-1">
@@ -264,6 +265,7 @@ export const Footer = () => {
           <Link href="/citations" className="hover:text-[#F4FF3F]">Citations</Link>
           <Link href="/settings" className="hover:text-[#F4FF3F]">Settings</Link>
           <span className="text-neutral-600">|</span>
+          <Link href="/blog" className="hover:text-[#F4FF3F]">Blog</Link>
           <Link href="/about" className="hover:text-[#F4FF3F]">About</Link>
           <Link href="/privacy" className="hover:text-[#F4FF3F]">Privacy</Link>
           <Link href="/terms" className="hover:text-[#F4FF3F]">Terms</Link>

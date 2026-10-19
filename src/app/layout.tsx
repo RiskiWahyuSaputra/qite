@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import './globals.css';
 import { LangProvider } from '@/lib/i18n/LangContext';
+import { AdSenseScript } from '@/components/ads/AdSenseScript';
 
 export const metadata: Metadata = {
   title: 'Qitee — Skripsi Scout AI | Neo-Brutalism Academic Assistant',
   description: 'AI Research Assistant untuk membantu mahasiswa menganalisis skripsi, mencari jurnal ilmiah yang relevan, menemukan kutipan yang dapat diverifikasi, dan menyusun daftar pustaka.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://qitee.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.qitee.site'),
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '48x48' },
@@ -17,6 +17,9 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
+  ...(process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && {
+    other: { 'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID },
+  }),
   openGraph: {
     title: 'Qitee — Skripsi Scout AI',
     description: 'AI Research Assistant untuk skripsi — analisis judul/PDF/paragraf, jurnal nyata, sitasi terverifikasi.',
@@ -51,14 +54,7 @@ export default function RootLayout({
     <html lang="id">
       <body className="min-h-screen bg-[#F5F2EA] text-[#171717] selection:bg-[#F4FF3F] selection:text-[#171717]">
         <LangProvider>
-          {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
-            <Script
-              async
-              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}`}
-              crossOrigin="anonymous"
-              strategy="afterInteractive"
-            />
-          )}
+          <AdSenseScript />
           {children}
         </LangProvider>
       </body>

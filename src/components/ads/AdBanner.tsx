@@ -41,7 +41,7 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot = 'sidebar', className 
   if (adsenseClient) {
     return (
       <div className={`p-2 bg-white brutal-border-sm text-center overflow-hidden ${className}`}>
-        <span className="text-[9px] font-mono text-neutral-400 block mb-1 uppercase tracking-wider">SPONSORED ADVERTISEMENT</span>
+        <span className="text-[9px] font-mono text-neutral-400 block mb-1 uppercase tracking-wider">Advertisement</span>
         <ins
           className="adsbygoogle"
           style={{ display: 'block' }}
@@ -54,7 +54,7 @@ export const AdBanner: React.FC<AdBannerProps> = ({ slot = 'sidebar', className 
     );
   }
 
-  // Tampilan Default: Slot Iklan Sponsor Kampus / Jasa Skripsi & Saweria Support
+  // Tampilan Default: Slot Sponsor & Saweria Support
   if (slot === 'sidebar') {
     return (
       <div className={`p-4 bg-white brutal-border-sm space-y-2.5 ${className}`}>

@@ -101,18 +101,18 @@ export default function LandingPage() {
                     <span className="text-neutral-500 font-bold">BAB II — Tinjauan Pustaka</span>
                   </div>
                   <div className="font-bold text-xs text-[#171717]">
-                    &quot;Deep Learning Frameworks for Scientific Literature Matching&quot;
+                    &quot;Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks&quot;
                   </div>
                   <div className="text-[11px] text-neutral-600">
-                    Kurniawan, A. &amp; Chen, W. (2024). IEEE Transactions on Knowledge Eng.
+                    Reimers, N. &amp; Gurevych, I. (2019). Proceedings of EMNLP-IJCNLP 2019.
                   </div>
                   <div className="p-2 bg-[#F4FF3F]/30 border-l-4 border-[#171717] text-[11px]">
-                    <span className="font-bold">Parafrasa Akademik:</span> Model embedding berbasis transformer terbukti mempercepat komparasi teks abstrak sebesar 42%.
+                    <span className="font-bold">Parafrasa Akademik:</span> Sentence embedding berbasis BERT memangkas waktu pencarian pasangan kalimat paling mirip dari 10.000 kalimat, dari sekitar 65 jam menjadi sekitar 5 detik.
                   </div>
                 </div>
 
                 <div className="flex gap-2 text-xs">
-                  <span className="bg-[#3454FF] text-white px-2 py-1 font-bold brutal-border-sm">DOI: 10.1109/TKDE.2024.123</span>
+                  <span className="bg-[#3454FF] text-white px-2 py-1 font-bold brutal-border-sm">DOI: 10.18653/v1/D19-1410</span>
                   <span className="bg-[#171717] text-white px-2 py-1 font-bold brutal-border-sm">OPEN ACCESS</span>
                 </div>
               </div>

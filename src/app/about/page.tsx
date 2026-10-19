@@ -38,6 +38,13 @@ export default function AboutPage() {
           </section>
 
           <section className="space-y-2">
+            <h2 className="text-lg font-black">Komitmen Integritas Akademik</h2>
+            <p className="font-bold text-neutral-700">
+              Qitee adalah alat bantu riset, bukan jasa pembuatan skripsi. Kami membantu mahasiswa menemukan sumber nyata dan memahaminya, tetapi tulisan, analisis, dan tanggung jawab akademik tetap milik mahasiswa. Setiap parafrasa hasil AI diberi label jelas, dan kami menganjurkan pengguna membaca sumber asli serta mengikuti kebijakan kampus tentang penggunaan AI. Baca juga panduan kami tentang <Link href="/blog/kutipan-langsung-parafrasa-dan-ringkasan" className="text-[#3454FF] underline">parafrasa dan plagiarisme</Link>.
+            </p>
+          </section>
+
+          <section className="space-y-2">
             <h2 className="text-lg font-black">Teknologi</h2>
             <p className="font-bold text-neutral-700">Next.js 16 (App Router) • Tailwind CSS v4 Neo-Brutalism • Groq (gpt-oss-20b) • pdf-parse • Supabase</p>
           </section>

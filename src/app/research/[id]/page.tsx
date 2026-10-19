@@ -9,7 +9,6 @@ import { getStoredProjectById, saveProjectToStorage } from '@/lib/storage';
 import { formatAPA, formatIEEE, formatHarvard, formatVancouver, generateBibTeX, generateRIS } from '@/lib/citations/formatter';
 import { getPdfDirectOrFallback } from '@/lib/academic/pdf-resolver';
 import { determineAcademicBadges } from '@/lib/academic/badges';
-import { AdBanner } from '@/components/ads/AdBanner';
 import { ResearchProject, JournalReference, CitationItem, PriorLiteratureItem } from '@/types';
 import {
   Sparkles,
@@ -601,7 +600,6 @@ export default function ResearchDetailPage() {
 
         {/* PANEL KANAN: Detail, Citation Hunter & Generator (Col 9-12) */}
         <section className="lg:col-span-4 space-y-4">
-          <AdBanner slot="content-inline" />
           {selectedJournal ? (
             <BrutalCard className="p-5 bg-white space-y-5 sticky top-20">
               {/* Header Jurnal */}
